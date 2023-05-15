@@ -15,3 +15,5 @@ void createTable();
 void delTable();
 int signUp(QString,QString);
 int getBigestNum();
+int * getEliminated();
+void delEliminated();

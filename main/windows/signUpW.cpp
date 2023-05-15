@@ -31,6 +31,15 @@ SignUpScreen::SignUpScreen(QMainWindow *parent)
     //label resim ekleme
     QPixmap pic("C:/Users/Pc_1/Desktop/prj's/prj_2/user.jpg");
     picLabel->setPixmap(pic);
+    int * list = getEliminated();
+    for(int i = 0;i<10;i++){
+        qDebug() << list[i];
+    }
+    delEliminated();
+    list = getEliminated();
+    for(int i = 0;i<10;i++){
+        qDebug() << list[i];
+    }
 }
 void SignUpScreen::signUpClicked()
 {
