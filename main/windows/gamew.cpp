@@ -29,7 +29,7 @@ gameScreen::gameScreen(QMainWindow *parent)
     l6->setGeometry(QRect(QPoint(350, 385), QSize(100,100)));
 
     //labela fotoğraf ekleme
-    QPixmap pix("C:/Users/Elif Aslan/Downloads/grass (3).png");
+    QPixmap pix("../main/Assets/grass.png");
     l1->setPixmap(pix.scaled(100,100));
     l2->setPixmap(pix.scaled(100,100));
     l3->setPixmap(pix.scaled(100,100));

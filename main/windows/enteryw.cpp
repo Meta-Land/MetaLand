@@ -29,7 +29,7 @@ EnteryScreen::EnteryScreen(QMainWindow *parent)
     picLabel->setGeometry(QRect(QPoint(50, 91), QSize(90, 90)));
 
     //label resim ekleme
-    QPixmap pic("C:/Users/Pc_1/Desktop/prj's/prj_2/user.jpg");
+    QPixmap pic("../main/Assets/user.jpg");
     picLabel->setPixmap(pic);
 }
 
