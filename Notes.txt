@@ -1,0 +1,15 @@
+sql connection :
+
+source : https://github.com/thecodemonkey86/qt_mysql_driver
+
+Download .zip folder acoording to your QT version
+put qsqlmysql.dll / qsqlmysqld.dll in application subdirectory "sqldrivers" (the folder within your qt version, eg. "QT/6.3.0/mingw_64/plugins/sqldrivers"
+put libmysql.dll (the MySQL library itself) and the OpenSSL v1.1 libraries, libcrypto-1_1 and libssl-1_1, in your application dir (the folder where your debug project is located)
+Rebuild your project (just remove your compiled project folder)
+
+
+qt-mysql sources : https://doc.qt.io/qt-6/sql-sqlstatements.html
+
+sql change password : https://www.youtube.com/watch?v=V8_fpBE9deA
+
+sql alter table (satır eklemek için kaynak) : https://www.techonthenet.com/mysql/tables/alter_table.php

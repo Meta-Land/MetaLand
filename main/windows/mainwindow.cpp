@@ -16,19 +16,19 @@ Screen::Screen(QMainWindow *parent)
     QRect  screenGeometry = screen->geometry();
     int height = screenGeometry.height();
     int width = screenGeometry.width();
-    manager = new QPushButton("Manager", this);
-    player = new QPushButton("Player", this);
+    managerButton = new QPushButton("Manager", this);
+    playerButton = new QPushButton("Player", this);
     // boyut ve konum atamaları yapılması
     int size_x = 200;
     int size_y = 50;
     int x = width/2-size_x*2.5/2;
     int y = height/2-size_y*2.5/2;
-    manager->setGeometry(QRect(QPoint(x, y), QSize(size_x, size_y)));
-    player->setGeometry(QRect(QPoint(x+size_x*3/2, y), QSize(size_x, size_y)));
+    managerButton->setGeometry(QRect(QPoint(x, y), QSize(size_x, size_y)));
+    playerButton->setGeometry(QRect(QPoint(x+size_x*3/2, y), QSize(size_x, size_y)));
 
     // Connect button signal to appropriate slot
-    connect(manager, &QPushButton::released, this, &Screen::manager_clicked);
-    connect(player, &QPushButton::released, this, &Screen::player_clicked);
+    connect(managerButton, &QPushButton::released, this, &Screen::manager_clicked);
+    connect(playerButton, &QPushButton::released, this, &Screen::player_clicked);
 
     QDate cd = QDate::currentDate();
     QTime ct = QTime::currentTime();

@@ -18,6 +18,78 @@ int IdPasswordControl(QString id,QString password)
     return -1;
 }
 
+// değerleri 0 ve ya altında olanları döndürür
+int * getEliminated(){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM persons WHERE money <= 0 OR food <= 0 OR stuff <= 0;");
+    query.exec();
+    static int eliminatedList[10];
+    int counter = 0;
+    while (query.next()) {
+        int num_get = query.value(0).toInt();
+        qDebug() << num_get;
+        eliminatedList[counter] = num_get;
+        counter +=1;
+    }
+    qDebug() << "data";
+    return eliminatedList;
+}
+
+void delEliminated(){
+    int * list = getEliminated();
+    for(int i = 0;i<10;i++){
+        if(list[i] != 0){
+            QSqlQuery query;
+            query.prepare("DELETE FROM persons WHERE (`num`='"+ QString::number(list[i]) +"');");
+            query.exec();
+        }
+    }
+}
+
+int IdControl(QString id){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM persons WHERE id = '"+id+"'");
+    query.exec();
+    //query ilerliyorsa eşleşen bir data vardır yani id password eşleşmesi olumuştur.
+    while (query.next()) {
+        int num_get = query.value(0).toInt();
+        qDebug() << num_get;
+        return num_get;
+    }
+    qDebug() << id;
+    return -1;
+}
+
+int signUp(QString id,QString password){
+    if(IdControl(id) == -1){
+        int num = getBigestNum()+1;
+        QSqlQuery query;
+        query.prepare("INSERT INTO `persons`  VALUES ("+QString::number(num)+",'"+id+"','"+password+"',0,0,0);");
+        if(query.exec()){
+            return 1;
+        }else{
+            return 0;
+        }
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("Bu Kullanıcı Adı Zaten Kullanımda!");
+        msgBox.exec();
+        return 0;
+    }
+}
+
+int getBigestNum(){
+    QSqlQuery query;
+    query.prepare("SELECT MAX(num) From persons");
+    if(query.exec()){
+        while (query.next()) {
+            int num_get = query.value(0).toInt();
+            qDebug() << num_get;
+            return num_get;
+        }
+    }
+    return -1;
+}
 
 int getMoney(int numberOfPerson)
 {
