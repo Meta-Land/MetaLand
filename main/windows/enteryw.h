@@ -6,6 +6,7 @@
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QMessageBox>
+#include "gamew.h"
 
 class EnteryScreen : public QMainWindow
 
@@ -17,6 +18,7 @@ class EnteryScreen : public QMainWindow
         QPushButton *signInButton;
         QPushButton *signUpButton;
         QLabel *picLabel;
+        gameScreen *thirdS;
 
         Q_OBJECT
 

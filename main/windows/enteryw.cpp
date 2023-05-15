@@ -56,6 +56,12 @@ void EnteryScreen::signInClicked()
             qDebug() << "id ve password bulunamamıştır.";
             msgBox.setText("ID Ve Password Bulunamamıştır.");
             msgBox.exec();
+            //yeni sayfa
+            thirdS= new gameScreen();
+            thirdS->resize(1920,1080);
+            thirdS->move(0,0);
+            thirdS->show();
+            this->close();
         }
     }
 }
