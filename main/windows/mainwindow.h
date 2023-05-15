@@ -22,7 +22,7 @@ class Screen : public QMainWindow
         QLabel *label;
         QLabel *label_2;
         AnalogClock *clock;
-        QPushButton *manager;
-        QPushButton *player;
+        QPushButton *managerButton;
+        QPushButton *playerButton;
         EnteryScreen *secW;
 };

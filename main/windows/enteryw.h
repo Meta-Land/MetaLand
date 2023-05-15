@@ -2,10 +2,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
-#include <QPixmap>
-#include <QtSql>
-#include <QSqlDatabase>
 #include <QMessageBox>
+#include "signUpW.h"
 
 class EnteryScreen : public QMainWindow
 
@@ -16,7 +14,9 @@ class EnteryScreen : public QMainWindow
         QLineEdit *PasswordEntery;
         QPushButton *signInButton;
         QPushButton *signUpButton;
+        QPushButton *backButton;
         QLabel *picLabel;
+        SignUpScreen *secW;
 
         Q_OBJECT
 

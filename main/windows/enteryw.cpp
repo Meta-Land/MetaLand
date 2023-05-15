@@ -63,6 +63,11 @@ void EnteryScreen::signInClicked()
 void EnteryScreen::signUpClicked()
 {
     //kullanıcı kayıt olmak istemektedir yeni bir ekrana yönlendirilmelidir.
+    secW = new SignUpScreen();
+    secW->resize(1920,1080);
+    secW->move(0, 0);
+    secW->show();
+    this->close();
 }
 
 

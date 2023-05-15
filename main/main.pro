@@ -12,14 +12,16 @@ SOURCES += \
     ./windows/mainwindow.cpp \
     ./windows/enteryw.cpp \
     ./windows/analog_w.cpp \
-    windows/sqllib.cpp
+    ./windows/signUpW.cpp \
+    ./windows/sqllib.cpp
 
 
 HEADERS += \
     ./windows/mainwindow.h \
     ./windows/enteryw.h \
     ./windows/analog_w.h \
-    windows/sqllib.h
+    ./windows/signUpW.h \
+    ./windows/sqllib.h
 
 
 FORMS +=
