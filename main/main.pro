@@ -12,6 +12,7 @@ SOURCES += \
     ./windows/mainwindow.cpp \
     ./windows/enteryw.cpp \
     ./windows/analog_w.cpp \
+    ./windows/gamew.cpp \
     windows/sqllib.cpp
 
 
@@ -19,6 +20,7 @@ HEADERS += \
     ./windows/mainwindow.h \
     ./windows/enteryw.h \
     ./windows/analog_w.h \
+    ./windows/gamew.h \
     windows/sqllib.h
 
 
