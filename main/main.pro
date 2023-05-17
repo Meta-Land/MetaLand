@@ -14,6 +14,7 @@ SOURCES += \
     ./windows/analog_w.cpp \
     ./windows/signUpW.cpp \
     ./windows/sqllib.cpp \
+    ./windows/managerW.cpp \
     ./windows/gamew.cpp
 
 
@@ -23,6 +24,7 @@ HEADERS += \
     ./windows/analog_w.h \
     ./windows/signUpW.h \
     ./windows/sqllib.h \
+    ./windows/managerW.h \
     ./windows/gamew.h
 
 
