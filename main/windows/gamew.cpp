@@ -5,42 +5,126 @@
 #include<iostream>
 #include<array>
 #include<string>
+#include<QPushButton>
+#include <QString>
+#include <QApplication>
+#include <QScreen>
+#include <QMessageBox>
 
 using namespace std;
+QVector<QVector<QPushButton*>> list1;
+int k=0;
+int l=2;
+
 gameScreen::gameScreen(QMainWindow *parent)
     : QMainWindow(parent)
 {
-    l1 = new QLabel("",this);
-    l1->setGeometry(QRect(QPoint(100, 350), QSize(100,100)));
 
-    l2 = new QLabel("",this);
-    l2->setGeometry(QRect(QPoint(200, 350), QSize(100,100)));
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect  screenGeometry = screen->geometry();
+    int heightS = screenGeometry.height();
+    int widthS = screenGeometry.width();
+    bool check=false;
 
-    l3 = new QLabel("",this);
-    l3->setGeometry(QRect(QPoint(300, 350), QSize(100,100)));
+    height=heightS;
+    width=widthS;
 
-    l4 = new QLabel("",this);
-    l4->setGeometry(QRect(QPoint(150, 385), QSize(100,100)));
+    //boyutların atanması
+    int row=5;
+    int col =5;
+    int y=0;
+    int x=0;
 
-    l5 = new QLabel("",this);
-    l5->setGeometry(QRect(QPoint(250, 385), QSize(100,100)));
+    //satir sayisi çift ise
+    if(row%2==0){
+        y=(heightS/2)-(100*row/2);
+    }
+    //sutun sayisi çift ise
+    if(col%2==0){
+        x=(widthS/2)-(100*col/2*2);
+    }
+    //satir sayisi tek ise
+    if(row%2!=0){
+        y=(heightS/2)-(100*row/2)+50;
+    }
+    //sutun sayisi tek ise
+    if(col%1==0){
+        x=(widthS/2)-(100*col/2*2)+50;
+    }
 
-    l6 = new QLabel("",this);
-    l6->setGeometry(QRect(QPoint(350, 385), QSize(100,100)));
-
-    //labela fotoğraf ekleme
+    int xTemp=x;
     QPixmap pix("../main/Assets/grass.png");
-    l1->setPixmap(pix.scaled(100,100));
-    l2->setPixmap(pix.scaled(100,100));
-    l3->setPixmap(pix.scaled(100,100));
-    l4->setPixmap(pix.scaled(100,100));
-    l5->setPixmap(pix.scaled(100,100));
-    l6->setPixmap(pix.scaled(100,100));
+    QIcon ButtonIcon(pix);
 
+    //2d vector oluşturulması
+    for( auto i=0;i<row;i++)
+    {
+        QVector<QPushButton*> list2;
+        QPushButton *a;
 
+        for(auto j=0;j<col;j++)
+        {
+            QString stI=QString::number(i);
+            QString stJ=QString::number(j);
+            QString text=stI+stJ;
+            a = new QPushButton(this);
+            a->setGeometry(QRect(QPoint(x,y), QSize(100,100)));
+            //butona resim eklenmesi
+            a->setIcon(ButtonIcon);
+            a->setIconSize(QSize(100,100));
+            a->setText(text);
+            //buton arka planını saydamlaştırma
+            a->setStyleSheet("background-color: rgba(255, 255, 255, 0)");
+            list2.push_back(a);
+            x+=100;
+        }
+        list1.push_back(list2);
+        //basılacak arsaların konumları için
+        xTemp+=50;
+        x=xTemp;
+        y+=35;
+    }
+    for(int i=0;i<row;i++){
+        for(int j=0;j<col;j++){
+            //arsaya tıklandığında çalışacak fonksiyonun çağırılması
+            connect (list1[i][j], & QPushButton :: clicked, this, [=] () -> void {
+                showDetails();
+                grassClicked(i,j);
+            });
+        }
+    }
 }
+
 
 gameScreen::~gameScreen()
 {
 }
+
+void gameScreen::showDetails()
+{
+    QMessageBox detailBox;
+
+    detailBox.move(500,200);
+    detailBox.setStyleSheet("QLabel{min-width: 400px;min-height: 400px;}");
+    detailBox.setText("selam");
+   // detailBox.addButton(market)
+    market= new QPushButton;
+    market->setGeometry(QRect(QPoint(100,100), QSize(70,70)));
+
+    //market=detailBox.addButton(tr("Custom Button"), QMessageBox::NoRole);
+    detailBox.exec();
+
+}
+
+
+void gameScreen::grassClicked(int x,int y)
+{
+    QPixmap market("../main/Assets/market.png");
+    QIcon ButtonIcon(market);
+    qDebug() << x;
+    qDebug() << y;
+    list1[x][y]->setIcon(ButtonIcon);
+    list1[x][y]->setIconSize(QSize(50,50));
+}
+
 

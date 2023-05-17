@@ -1,6 +1,7 @@
 #include <QMainWindow>
 #include <QPixmap>
 #include <QLabel>
+#include <QPushButton>
 #include <QGraphicsPixmapItem>
 #include <QLineEdit>
 
@@ -11,17 +12,21 @@ class gameScreen:  public QMainWindow
     public:
         gameScreen(QMainWindow *parent = nullptr);
         ~gameScreen();
+
+    private slots:
+        void grassClicked(int x,int y);
+        void showDetails();
     private:
-       // QPixmap *l;
-        QLabel *l1;
-        QLabel *l2;
-        QLabel *l3;
-        QLabel *l4;
-        QLabel *l5;
-        QLabel *l6;
-        QLabel *l7;
+
         QLineEdit *satir;
         QLineEdit *sutun;
+        QLabel *detail;
+        QPushButton *market;
+        QPushButton *property;
+        QPushButton *mall;
+
+        int height;
+        int width;
 
 };
 
