@@ -1,6 +1,91 @@
 #include "sqllib.h"
 #include "mainwindow.h"
 
+void delTable(QString table){
+    QSqlQuery drop;
+    drop.prepare("DROP TABLE "+table+"");
+    drop.exec();
+}
+
+void createLandTable(){
+    QSqlQuery create;
+    create.prepare( "CREATE TABLE IF NOT EXISTS land (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
+                   "landOwner INTEGER,"
+                   "landType VARCHAR(30))");
+    if(create.exec()){
+        qDebug() << "land table created";
+    }else{
+        qDebug() << "land table not created";
+    }
+}
+
+void createPersonsTable(){
+    QSqlQuery create;
+    create.prepare( "CREATE TABLE IF NOT EXISTS persons (num INTEGER UNIQUE PRIMARY KEY,"
+                   "id VARCHAR(30),"
+                   "passwd VARCHAR(30),"
+                   "money INTEGER,"
+                   "food INTEGER,"
+                   "stuff INTEGER)");
+    if(create.exec()){
+        qDebug() << "table created";
+    }else{
+        qDebug() << "table not created";
+    }
+}
+
+void createManagerTable(){
+    QSqlQuery create;
+    create.prepare( "CREATE TABLE IF NOT EXISTS manager (num INTEGER UNIQUE PRIMARY KEY,"
+                   "startFood INTEGER,"
+                   "startMoney INTEGER,"
+                   "startStuff INTEGER,"
+                   "dailyFoodExpense INTEGER,"
+                   "dailyMoneyExpense INTEGER,"
+                   "dailyStuffExpense INTEGER,"
+                   "gameStartDate DATE,"
+                   "gameSize VARCHAR(30),"
+                   "placeOwnerFee INTEGER,"
+                   "fixedIncome INTEGER,"
+                   "fixedIncomeRate INTEGER)");
+    if(create.exec()){
+        qDebug() << "manager table created";
+    }else{
+        qDebug() << "manager table not created";
+    }
+    //initManager();
+}
+
+void createBusinessTable(){
+    QSqlQuery create;
+    create.prepare( "CREATE TABLE IF NOT EXISTS business (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
+                   "businessType VARCHAR(30),"
+                   "businessLevel INTEGER,"
+                   "businessCapacity INTEGER,"
+                   "businessWorkerCount INTEGER)");
+    if(create.exec()){
+        qDebug() << "business table created";
+    }else{
+        qDebug() << "business table not created";
+    }
+}
+
+void createWorkersTable(){
+    QSqlQuery create;
+    create.prepare("CREATE TABLE IF NOT EXISTS workers (workerNo INTEGER UNIQUE PRIMARY KEY,"
+                   "workinglandNum VARCHAR(30),"
+                   "workerFee INTEGER,"
+                   "startToWorkDate DATE,"
+                   "stopToWorkDate DATE,"
+                   "numberOfWorkingDays INTEGER,"
+                   "workingHours INTEGER)");
+    if(create.exec()){
+        qDebug() << "workers table created";
+    }else{
+        qDebug() << "workers table not created";
+    }
+}
+
 //eğer aranan isim ev parolada kişi bulunur ise o kişinin eşsiz verisi olan numarayı döndürür.
 //bulunamazsa -1 döndürür
 int IdPasswordControl(QString id,QString password)
@@ -58,24 +143,6 @@ int IdControl(QString id){
     }
     qDebug() << id;
     return -1;
-}
-
-int signUp(QString id,QString password){
-    if(IdControl(id) == -1){
-        int num = getBigestNum()+1;
-        QSqlQuery query;
-        query.prepare("INSERT INTO `persons`  VALUES ("+QString::number(num)+",'"+id+"','"+password+"',0,0,0);");
-        if(query.exec()){
-            return 1;
-        }else{
-            return 0;
-        }
-    }else{
-        QMessageBox msgBox;
-        msgBox.setText("Bu Kullanıcı Adı Zaten Kullanımda!");
-        msgBox.exec();
-        return 0;
-    }
 }
 
 int getBigestNum(){
@@ -145,26 +212,235 @@ void setStuff(int numberOfPerson, int stuff)
     query.exec();
 }
 
-void createTable(){
-    QSqlQuery create;
-    create.prepare( "CREATE TABLE IF NOT EXISTS persons (num INTEGER UNIQUE PRIMARY KEY,"
-                   "id VARCHAR(30),"
-                   "passwd VARCHAR(30),"
-                   "money INTEGER,"
-                   "food INTEGER,"
-                   "stuff INTEGER)");
-    if(create.exec()){
-        qDebug() << "table created";
+/*
+int initManager(){
+    QSqlQuery query;
+    query.prepare("INSERT INTO `manager`  VALUES (:num, :startFood, :startMoney,:startStuff,"
+                  ":dailyFoodExpense, :dailyMoneyExpense, :dailyStuffExpense, :gameStartDate, :gameSize, :placeOwnerFee,"
+                  ":fixedIncome, :fixedIncomeRate);");
+    query.bindValue(":num", 1);
+    query.bindValue(":startFood", 50);
+    query.bindValue(":startMoney", 50);
+    query.bindValue(":startStuff", 50);
+    query.bindValue(":dailyFoodExpense", 10);
+    query.bindValue(":dailyMoneyExpense", 10);
+    query.bindValue(":dailyStuffExpense", 10);
+    query.bindValue(":gameStartDate", "1-1-1");
+    query.bindValue(":gameSize", "5x5");
+    query.bindValue(":placeOwnerFee", 20);
+    query.bindValue(":fixedIncome", 20);
+    query.bindValue(":fixedIncomeRate", 20);
+    if(query.exec()){
+        return 1;
     }else{
-        qDebug() << "table not created";
+        return 0;
+    }
+}
+*/
+int initManager(int startFood,int startMoney,int startStuff,int dailyFoodExpense,
+                int dailyMoneyExpense,int dailyStuffExpense,QString gameStartDate,QString gameSize,
+                int placeOwnerFee, int fixedIncome, int fixedIncomeRate){
+    delTable("manager");
+    createManagerTable();
+    QSqlQuery query;
+    query.prepare("INSERT INTO `manager`  VALUES (:num, :startFood, :startMoney, :startStuff,"
+                  " :dailyFoodExpense, :dailyMoneyExpense, :dailyStuffExpense, :gameStartDate, :gameSize, :placeOwnerFee,"
+                  " :fixedIncome, :fixedIncomeRate);");
+    query.bindValue(":num", 1);
+    query.bindValue(":startFood", startFood);
+    query.bindValue(":startMoney", startMoney);
+    query.bindValue(":startStuff", startStuff);
+    query.bindValue(":dailyFoodExpense", dailyFoodExpense);
+    query.bindValue(":dailyMoneyExpense", dailyMoneyExpense);
+    query.bindValue(":dailyStuffExpense", dailyStuffExpense);
+    query.bindValue(":gameStartDate", gameStartDate);
+    query.bindValue(":gameSize", gameSize);
+    query.bindValue(":placeOwnerFee", placeOwnerFee);
+    query.bindValue(":fixedIncome", fixedIncome);
+    query.bindValue(":fixedIncomeRate", fixedIncomeRate);
+    if(query.exec()){
+        qDebug() << "okey";
+        return 1;
+    }else{
+        return 0;
     }
 }
 
-void delTable(){
-    QSqlQuery drop;
-    drop.prepare("DROP TABLE persons");
-    drop.exec();
+
+int getStartFood(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT startFood FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int gMoney = query.value(0).toInt();
+    qDebug() << gMoney;
+    return gMoney;
 }
+
+int getStartMoney(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT startMoney FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int gMoney = query.value(0).toInt();
+    qDebug() << gMoney;
+    return gMoney;
+}
+
+int getStartStuff(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT startStuff FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int gMoney = query.value(0).toInt();
+    qDebug() << gMoney;
+    return gMoney;
+}
+
+int getDailyFoodExpense(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT dailyFoodExpense FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int gMoney = query.value(0).toInt();
+    qDebug() << gMoney;
+    return gMoney;
+}
+
+int getDailyMoneyExpense(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT dailyMoneyExpense FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int gMoney = query.value(0).toInt();
+    qDebug() << gMoney;
+    return gMoney;
+}
+
+int getDailyStuffExpense(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT dailyStuffExpense FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int gMoney = query.value(0).toInt();
+    qDebug() << gMoney;
+    return gMoney;
+}
+
+QString getGameStartDate(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT gameStartDate FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    QString gameStartDate = query.value(0).toString();
+    qDebug() << gameStartDate;
+    return gameStartDate;
+}
+
+QString getGameSize(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT gameSize FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    QString gameSize = query.value(0).toString();
+    qDebug() << gameSize;
+    return gameSize;
+}
+
+int getPlaceOwnerFee(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT placeOwnerFee FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int placeOwnerFee = query.value(0).toInt();
+    qDebug() << placeOwnerFee;
+    return placeOwnerFee;
+}
+
+int getfixedIncome(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT fixedIncome FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int fixedIncome = query.value(0).toInt();
+    qDebug() << fixedIncome;
+    return fixedIncome;
+}
+
+int getfixedIncomeRate(int numberOfManager = 1)
+{
+    QSqlQuery query;
+    query.prepare("SELECT fixedIncomeRate FROM manager WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+    query.next();
+    int fixedIncomeRate = query.value(0).toInt();
+    qDebug() << fixedIncomeRate;
+    return fixedIncomeRate;
+}
+
+
+
+void setStartFood(int numberOfManager, int startFood)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE manager SET startFood = '"+ QString::number(startFood) +"' WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+}
+
+void setStartMoney(int numberOfManager, int startMoney)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE manager SET startMoney = '"+ QString::number(startMoney) +"' WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+}
+
+void setStartStuff(int numberOfManager, int startStuff)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE manager SET startStuff = '"+ QString::number(startStuff) +"' WHERE num = '"+QString::number(numberOfManager)+"'");
+    query.exec();
+}
+
+int signUp(QString id,QString password){
+    //eğer bu isimde birisi bulunmadıysa
+    int num = getBigestNum()+1;
+    if(IdControl(id) == -1){
+        QSqlQuery query;
+        query.prepare("INSERT INTO `persons`  VALUES "
+                            "("+QString::number(num)+",'"+id+"','"+password+"',"+QString::number(getStartFood())+","
+                            ""+QString::number(getStartMoney())+","+QString::number(getStartStuff())+");");
+    if(query.exec()){}
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("Bu Kullanıcı Adı Zaten Kullanımda!");
+        msgBox.exec();
+    }
+    return num;
+}
+
+void updateDailyExpense(int personNum){
+    int food = getFood(personNum);
+    int money = getMoney(personNum);
+    int stuff = getStuff(personNum);
+    food -= getDailyFoodExpense();
+    money -= getDailyMoneyExpense();
+    stuff -= getDailyStuffExpense();
+    setFood(personNum,food);
+    setMoney(personNum,money);
+    setStuff(personNum,stuff);
+
+}
+
 
 QSqlDatabase GenDb()
 {
@@ -183,3 +459,413 @@ QSqlDatabase GenDb()
     msgBox.exec();
     return db;
 }
+
+int getBigestLandNum(){
+    QSqlQuery query;
+    query.prepare("SELECT MAX(landNum) From land");
+    if(query.exec()){
+        while (query.next()) {
+            int num_get = query.value(0).toInt();
+            qDebug() << num_get;
+            return num_get;
+        }
+    }
+    return -1;
+}
+
+void initLand(QString landNum, int landOwner, QString landType){
+    QSqlQuery query;
+    query.prepare("INSERT INTO `land`  VALUES (:landNum, :landOwner, :landType)");
+    query.bindValue(":landNum", landNum);
+    query.bindValue(":landOwner", landOwner);
+    query.bindValue(":landType", landType);
+    query.exec();
+}
+
+void genLands(int x, int y){
+    for(int i=0;i<x;i++){
+        for(int j=0;j<y;j++){
+            initLand(QString::number(i)+"x"+QString::number(j),-1,"land");
+        }
+    }
+}
+
+void setLandType(QString landNum, QString landType)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE land SET landType = '"+landType+"' WHERE landNum = '"+landNum+"'");
+    query.exec();
+}
+
+QString getLandType(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT LandType FROM land WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    QString LandType = query.value(0).toString();
+    qDebug() << LandType;
+    return LandType;
+}
+
+void setLandOwner(QString landNum, int landOwner)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE land SET landType = '"+QString::number(landOwner)+"' WHERE landNum = '"+landNum+"'");
+    query.exec();
+}
+
+void genGameTable(int x, int y){
+    genLands(x,y);
+    int marketX = rand()%x;
+    int marketY = rand()%y;
+    setLandType(QString::number(marketX)+"x"+QString::number(marketY),"market");
+    int storeX = rand()%x;
+    int storeY = rand()%y;
+    //aynı noktayı hem market hem store emlakçı atanmaması için döngüler
+    while(marketX == storeX and marketY == storeY){
+        storeX = rand()%x;
+        storeY = rand()%y;
+    }
+    setLandType(QString::number(storeX)+"x"+QString::number(storeY),"store");
+    int landAgentX = rand()%x;
+    int landAgentY = rand()%y;
+    while((marketX == landAgentX and marketY == landAgentY)and(storeX == landAgentX and storeY == landAgentY)){
+        landAgentX = rand()%x;
+        landAgentY = rand()%y;
+    }
+    setLandType(QString::number(landAgentX)+"x"+QString::number(landAgentY),"landAgent");
+}
+
+void setBussinessType(QString landNum, QString businessType)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE business SET businessType = '"+businessType+"' WHERE landNum = '"+landNum+"'");
+    query.exec();
+}
+
+void setBussinessLevel(QString landNum, int businessLevel)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE business SET businessType = '"+QString::number(businessLevel)+"' WHERE landNum = '"+landNum+"'");
+    query.exec();
+}
+
+void setBussinessCapacity(QString landNum, int businessCapacity)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE business SET businessType = '"+QString::number(businessCapacity)+"' WHERE landNum = '"+landNum+"'");
+    query.exec();
+}
+
+void setBussinessWorkerCount(QString landNum, int businessWorkerCount)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE business SET businessType = '"+QString::number(businessWorkerCount)+"' WHERE landNum = '"+landNum+"'");
+    query.exec();
+}
+
+QString getBussinessType(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    QString businessType = query.value(0).toString();
+    qDebug() << businessType;
+    return businessType;
+}
+
+
+int getBussinessLevel(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int bussinessLevel = query.value(0).toInt();
+    qDebug() << bussinessLevel;
+    return bussinessLevel;
+}
+
+int getBussinessCapacity(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int bussinessCapacity = query.value(0).toInt();
+    qDebug() << bussinessCapacity;
+    return bussinessCapacity;
+}
+
+int getBussinessWorkerCount(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int bussinessWorkerCount = query.value(0).toInt();
+    qDebug() << bussinessWorkerCount;
+    return bussinessWorkerCount;
+}
+
+
+int getOwnedLandNums(int landOwner, QString *landNumList){
+    QSqlQuery query;
+    query.prepare("SELECT landNum FROM land WHERE landOwner = '"+QString::number(landOwner)+"'");
+    query.exec();
+    int x = 0;
+    while (query.next()) {
+        QString landNum = query.value(0).toString();
+        qDebug() << landNum;
+        landNumList[x] = landNum;
+        x += 1;
+    }
+    return x;
+}
+
+void bussinessLevelUp(QString landNum){
+    int level = getBussinessLevel(landNum);
+    int capacity = getBussinessCapacity(landNum);
+    //level 3 ten fazla ise arttırmaz
+    //(1. seviye - 3 oyuncu; 2. seviye-6 oyuncu; 3. seviye 12 oyuncu)
+    if(level<3){
+        setBussinessLevel(landNum,level+1);
+        setBussinessCapacity(landNum,capacity*2);
+    }
+}
+
+void newWorker(int workerNo, QString workinglandNum, int workerFee,QString startToWorkDate,
+               QString stopToWorkDate, int numberOfWorkingDays, int workingHours){
+    QSqlQuery query;
+    query.prepare("INSERT INTO `workers` VALUES (:workerNo, :workinglandNum, :workerFee, :startToWorkDate,"
+                  ":stopToWorkDate, :numberOfWorkingDays, :workingHours);");
+    query.bindValue(":workerNo", workerNo);
+    query.bindValue(":workinglandNum", workinglandNum);
+    query.bindValue(":workerFee", workerFee);
+    query.bindValue(":startToWorkDate", startToWorkDate);
+    query.bindValue(":stopToWorkDate", stopToWorkDate);
+    query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
+    query.bindValue(":workingHours", workingHours);
+    if(query.exec()){
+
+    }else{
+        qDebug()<<"new Worker error";
+    }
+}
+
+void updateWorker(int workerNo, QString workinglandNum, int workerFee,QString startToWorkDate,
+               QString stopToWorkDate, int numberOfWorkingDays, int workingHours){
+    QSqlQuery query;
+    query.prepare("UPDATE `workers` SET  workinglandNum = :workinglandNum, workerFee = :workerFee, startToWorkDate =  :startToWorkDate,"
+                  " stopToWorkDate = :stopToWorkDate, numberOfWorkingDays = :numberOfWorkingDays, workingHours = :workingHours WHERE workerNo = :workerNo");
+    query.bindValue(":workerNo", workerNo);
+    query.bindValue(":workinglandNum", workinglandNum);
+    query.bindValue(":workerFee", workerFee);
+    query.bindValue(":startToWorkDate", startToWorkDate);
+    query.bindValue(":stopToWorkDate", stopToWorkDate);
+    query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
+    query.bindValue(":workingHours", workingHours);
+    if(query.exec()){
+
+    }else{
+        qDebug()<<"update Worker error";
+    }
+}
+
+int* getContractEndedWorkers(QString date){
+    QSqlQuery query;
+    query.prepare("SELECT workerNo FROM workers WHERE stopToWorkDate < "+ date +";");
+    query.exec();
+    static int contractEndedList[50];
+    int counter = 0;
+    while (query.next()) {
+        int num_get = query.value(0).toInt();
+        qDebug() << num_get;
+        contractEndedList[counter] = num_get;
+        counter +=1;
+    }
+    qDebug() << "data";
+    return contractEndedList;
+}
+
+void delContractEndedWorkers(QString date){
+    int * list = getContractEndedWorkers(date);
+    for(int i = 0;i<50;i++){
+        if(list[i] != 0){
+            QSqlQuery query;
+            query.prepare("DELETE FROM persons WHERE (`workerNo`='"+ QString::number(list[i]) +"');");
+            query.exec();
+        }
+    }
+}
+
+int * getWorkers(){
+    QSqlQuery query;
+    query.prepare("SELECT workerNo FROM workers;");
+    query.exec();
+    static int workerList[100];
+    int counter = 0;
+    while (query.next()) {
+        int num_get = query.value(0).toInt();
+        qDebug() << num_get;
+        workerList[counter] = num_get;
+        counter +=1;
+    }
+    qDebug() << "data";
+    return workerList;
+}
+
+int * getWorkersAtBussiness(QString workinglandNum){
+    QSqlQuery query;
+    query.prepare("SELECT workerNo FROM workers WHERE workinglandNum = "+ workinglandNum +";");
+    query.exec();
+    static int workerList[12];
+    int counter = 0;
+    while (query.next()) {
+        int num_get = query.value(0).toInt();
+        qDebug() << num_get;
+        workerList[counter] = num_get;
+        counter +=1;
+    }
+    qDebug() << "data";
+    return workerList;
+}
+
+QString getWorkingLand(int num){
+    QSqlQuery query;
+    query.prepare("SELECT workinglandNum FROM workers WHERE workerNo = "+ QString::number(num) +";");
+    query.exec();
+    while (query.next()) {
+        return query.value(0).toString();
+    }
+
+}
+
+int * getWorkersAtMarket(){
+    int* worker = getWorkers();
+    static int marketWorkers[50];
+    int markettercount = 0;
+    for(int i =0;i<100;i++){
+        if(worker[i] != 0){
+            QString land = getWorkingLand(worker[i]);
+            QString landType = getLandType(land);
+            if(landType == "market"){
+                marketWorkers[markettercount] = worker[i];
+                qDebug() << worker[i];
+            }
+        }
+    }
+    return marketWorkers;
+}
+
+int * getWorkersAtStore(){
+    int* worker = getWorkers();
+    static int marketWorkers[50];
+    int markettercount = 0;
+    for(int i =0;i<100;i++){
+        if(worker[i] != 0){
+            QString land = getWorkingLand(worker[i]);
+            QString landType = getLandType(land);
+            if(landType == "market"){
+                marketWorkers[markettercount] = worker[i];
+                qDebug() << worker[i];
+            }
+        }
+    }
+    return marketWorkers;
+}
+
+int * getWorkersAtLandAgent(){
+    int* worker = getWorkers();
+    static int landAgentWorkers[50];
+    int agentercount = 0;
+    for(int i =0;i<100;i++){
+        if(worker[i] != 0){
+            QString land = getWorkingLand(worker[i]);
+            QString landType = getLandType(land);
+            if(landType == "landAgent"){
+                landAgentWorkers[agentercount] = worker[i];
+                qDebug() << worker[i];
+            }
+        }
+    }
+    return landAgentWorkers;
+}
+
+
+bool isPersonWorking(int num){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM workers WHERE workerNo = "+ QString::number(num) +";");
+    query.exec();
+    while (query.next()) {
+        return true;
+    }
+    return false;
+}
+
+/*
+    KULLANICI TABLOSU GEREKLİLİKLER
+    "Kullanıcı no"
+    "kullanıcı adı"
+    "kullanıcı soyadı"
+    "kullanıcı şifresi"
+    "kullanıcı yemek miktarı,"
+    "kullanıcı eşyamiktarı,"
+    "kullanıcı para miktarı,"
+
+    YÖNETİCİ TABLOSUNDA BULUNACAK OLANLAR
+    "başlangıç yemek miktarı,"
+    "başlangıç eşya miktarı,"
+    "başlangıç para miktarı,"
+    "günlük yiyecek gideri,"
+    "günlük eşya gideri,"
+    "günlük para gideri,"
+    "oyun başlangıç tarihi"
+    "oyun alan boyutu (karesel alan 3x4 gibi)"
+    //bir işletme yöneticisinin alacağı yönetici tarafından belirlenen değer
+    "yönetici işletme ücreti,"
+    "işletme sabit gelir miktarı,"
+    "işletme sabit gelir oranı,"
+
+    ALAN TABLOSUNDA BULUNACAK OLANLAR
+    "(karesel) alan no,"
+    "alan türü (arsa veyaişletme),"
+    "alan sahibi," // user no
+
+    İŞLETME TABLOSUNDA BULUNACAK OLANLAR
+    "(karesel) alan no,"
+    "işletme türü(market,mağaza,emlak),"
+    "işletme seviyesi,"
+    "işletme kapasitesi,"
+    "işletme çalışan sayısı,"
+
+    //işletmede kullanıcıya bağlı değişen veriler
+    WORKERS TABLOSUNDA BULUNACAK OLANLAR
+    "(karesel) çalışılan alan no,"
+    "Kullanıcı no"
+    "kullanıcı işletme ücreti,"
+    "kullanıcı çalışma başlangıç tarihi,"
+    "kullanıcı çalışma bitiş tarihi,"
+    "kullanıcı çalışma gün sayısı,"
+    "kullanıcı çalışma saatleri,"
+
+    MARKET TABLOSU BULUNACAK OLANLAR
+    "market yiyecek ücreti,"
+
+    MAĞAZA TABLOSU BULUNACAK OLANLAR
+    "mağaza eşya ücreti,"
+    EMLAK TABLOSU BULUNACAK OLANLAR
+    "işletme fiyatı,"
+    "kiralık işletme fiyatı,"
+    "emlak komisyonu,"
+    "emlak işlemi (kira-satış),"
+
+    "kira süresi,"
+    "satış tarihi,"
+    "kiralama tarihi,"
+    "kira bitiş tarihi,"
+    "işlemin yapıldığı emlak,"
+    "işletme mevcut seviye"
+*/
