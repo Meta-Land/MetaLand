@@ -31,10 +31,11 @@ Screen::Screen(QMainWindow *parent)
     connect(playerButton, &QPushButton::released, this, &Screen::player_clicked);
 
     QDate cd = QDate::currentDate();
+    QString value = cd.toString("yyyy-MM-dd");
     QTime ct = QTime::currentTime();
     cd = cd.addDays(1);
     QString ct_s = ct.toString();
-    QString cd_s = cd.toString();
+    QString cd_s = value;
     label = new QLabel(ct_s,this);
     label_2 = new QLabel(cd_s,this);
     label_2->move(100,0);

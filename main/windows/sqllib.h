@@ -2,7 +2,10 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-QSqlDatabase GenDb();
+void createSchema(QString Schema);
+QSqlDatabase connectDataBase();
+bool connectDataBaseSchema(QString schema);
+void getSchemas(QString *Schemas);
 int IdPasswordControl(QString,QString, QString);
 int IdControl(QString name,QString surname);
 int getMoney(int);
@@ -41,7 +44,7 @@ int getfixedIncome(int );
 int getfixedIncomeRate(int);
 
 //yönetici tablosunun boş init edilmesi
-//int initManager();
+int initManager();
 int initManager(int ,int ,int ,int ,int ,int ,QString ,QString ,int , int, int);
 // gün bitimi yemek eşya ve paranın data baste bulunan değere göre güncellenmesi
 void updateDailyExpense(int);

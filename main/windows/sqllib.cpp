@@ -1,5 +1,58 @@
+#include <QDate>
 #include "sqllib.h"
 #include "mainwindow.h"
+
+void createSchema(QString Schema){
+    QSqlQuery create;
+    create.prepare("CREATE SCHEMA `"+Schema+"` ;");
+    create.exec();
+    //create tables
+    createLandTable();
+    createPersonsTable();
+    createManagerTable();
+    createBusinessTable();
+    createWorkersTable();
+    initManager();
+}
+
+QSqlDatabase connectDataBase()
+{
+    //sql part
+    QMessageBox msgBox;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("127.0.0.1");
+    db.setUserName("root");
+    db.setPassword("EandE");
+    //db.setDatabaseName("first_sql");
+    if(db.open()){
+        msgBox.setText("SQL Database Connection Done!");
+    }else{
+        msgBox.setText("SQL Database Connection Error!");
+    }
+    //msgBox.exec();
+    return db;
+}
+
+bool connectDataBaseSchema(QString schema)
+{
+    //sql part
+    QMessageBox msgBox;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("127.0.0.1");
+    db.setUserName("root");
+    db.setPassword("EandE");
+    db.setDatabaseName(schema);
+    //db.setDatabaseName("first_sql");
+    if(db.open()){
+        msgBox.setText("SQL Database Connection Done!");
+        msgBox.exec();
+        return true;
+    }else{
+        msgBox.setText("SQL Database Connection Error!");
+        msgBox.exec();
+        return false;
+    }
+}
 
 void delTable(QString table){
     QSqlQuery drop;
@@ -84,6 +137,51 @@ void createWorkersTable(){
         qDebug() << "workers table created";
     }else{
         qDebug() << "workers table not created";
+    }
+}
+
+void CreateMarketTable(){
+    QSqlQuery create;
+    create.prepare("CREATE TABLE IF NOT EXISTS markets (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
+                   "foodPrice INTEGER)");
+    if(create.exec()){
+        qDebug() << "markets table created";
+    }else{
+        qDebug() << "markets table not created";
+    }
+}
+
+void CreateStoreTable(){
+    QSqlQuery create;
+    create.prepare("CREATE TABLE IF NOT EXISTS stores (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
+                   "stuffPrice INTEGER)");
+    if(create.exec()){
+        qDebug() << "stores table created";
+    }else{
+        qDebug() << "stores table not created";
+    }
+}
+
+void CreateLandagentTable(){
+    QSqlQuery create;
+    create.prepare("CREATE TABLE IF NOT EXISTS landagents (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
+                   "stuffPrice INTEGER)");
+    if(create.exec()){
+        qDebug() << "landagents table created";
+    }else{
+        qDebug() << "landagents table not created";
+    }
+}
+
+void getSchemas(QString *Schemas){
+    QSqlQuery query;
+    query.prepare("SHOW schemas;");
+    query.exec();
+    int x = 0;
+    while (query.next()) {
+        QString schemaName = query.value(0).toString();
+        Schemas[x] = schemaName;
+        x++;
     }
 }
 
@@ -213,8 +311,10 @@ void setStuff(int numberOfPerson, int stuff)
     query.exec();
 }
 
-/*
+
 int initManager(){
+    QDate cd = QDate::currentDate();
+    QString value = cd.toString("yyyy-MM-dd");
     QSqlQuery query;
     query.prepare("INSERT INTO `manager`  VALUES (:num, :startFood, :startMoney,:startStuff,"
                   ":dailyFoodExpense, :dailyMoneyExpense, :dailyStuffExpense, :gameStartDate, :gameSize, :placeOwnerFee,"
@@ -226,7 +326,7 @@ int initManager(){
     query.bindValue(":dailyFoodExpense", 10);
     query.bindValue(":dailyMoneyExpense", 10);
     query.bindValue(":dailyStuffExpense", 10);
-    query.bindValue(":gameStartDate", "1-1-1");
+    query.bindValue(":gameStartDate", value);
     query.bindValue(":gameSize", "5x5");
     query.bindValue(":placeOwnerFee", 20);
     query.bindValue(":fixedIncome", 20);
@@ -237,7 +337,7 @@ int initManager(){
         return 0;
     }
 }
-*/
+
 int initManager(int startFood,int startMoney,int startStuff,int dailyFoodExpense,
                 int dailyMoneyExpense,int dailyStuffExpense,QString gameStartDate,QString gameSize,
                 int placeOwnerFee, int fixedIncome, int fixedIncomeRate){
@@ -389,8 +489,6 @@ int getfixedIncomeRate(int numberOfManager = 1)
     return fixedIncomeRate;
 }
 
-
-
 void setStartFood(int numberOfManager, int startFood)
 {
     QSqlQuery query;
@@ -439,26 +537,6 @@ void updateDailyExpense(int personNum){
     setFood(personNum,food);
     setMoney(personNum,money);
     setStuff(personNum,stuff);
-
-}
-
-
-QSqlDatabase GenDb()
-{
-    //sql part
-    QMessageBox msgBox;
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("127.0.0.1");
-    db.setUserName("root");
-    db.setPassword("EandE");
-    db.setDatabaseName("first_sql");
-    if(db.open()){
-        msgBox.setText("SQL Database Connection Done!");
-    }else{
-        msgBox.setText("SQL Database Connection Error!");
-    }
-    msgBox.exec();
-    return db;
 }
 
 int getBigestLandNum(){
@@ -741,7 +819,6 @@ QString getWorkingLand(int num){
     while (query.next()) {
         return query.value(0).toString();
     }
-
 }
 
 int * getWorkersAtMarket(){

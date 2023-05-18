@@ -15,6 +15,7 @@ SOURCES += \
     ./windows/signUpW.cpp \
     ./windows/sqllib.cpp \
     ./windows/managerW.cpp \
+    ./windows/dataBaseWindow.cpp\
     ./windows/gamew.cpp
 
 
@@ -25,6 +26,7 @@ HEADERS += \
     ./windows/signUpW.h \
     ./windows/sqllib.h \
     ./windows/managerW.h \
+    ./windows/dataBaseWindow.h\
     ./windows/gamew.h
 
 
