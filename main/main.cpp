@@ -5,6 +5,7 @@
 #include "./windows/mainwindow.h"
 #include "./windows/sqllib.h"
 #include "./windows/managerW.h"
+#include "./windows/dataBaseWindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +15,12 @@ int main(int argc, char *argv[])
     w.move(0, 0);
     w.show();
     // sql in init edilmesi
-    QSqlDatabase db = GenDb();
+    DataBaseScreen w_3;
+    int w_3_x = 800;
+    int w_3_y = 500;
+    w_3.move((1920-w_3_x)/2,(1080-w_3_y)/2);
+    w_3.resize(w_3_x,w_3_y);
+    w_3.show();
     //delTable("manager");
     //delTable("workers");
     delTable("persons");
