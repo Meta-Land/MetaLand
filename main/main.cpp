@@ -17,10 +17,11 @@ int main(int argc, char *argv[])
     QSqlDatabase db = GenDb();
     //delTable("manager");
     //delTable("workers");
+    delTable("persons");
     createPersonsTable();
     createManagerTable();
     createWorkersTable();
-    int activeNum = signUp("emre","emre123");
+    int activeNum = signUp("emre","kaya","emre123");
     qDebug() << activeNum;
     updateWorker(activeNum,"4x4",100,"1-1-1","3-3-3",5,5);
     qDebug() << isPersonWorking(activeNum);

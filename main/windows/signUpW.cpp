@@ -5,22 +5,25 @@ SignUpScreen::SignUpScreen(QMainWindow *parent)
     : QMainWindow(parent)
 {
     //giriş bölümlerinin tanımlanması
-    IdEntery = new QLineEdit(this);
+    nameEntery = new QLineEdit(this);
+    surnameEntery = new QLineEdit(this);
     PasswordEntery = new QLineEdit(this);
     PasswordControlEntery = new QLineEdit(this);
     //giriş bölümlerine konum ve boyut atanması
-    IdEntery->setGeometry(QRect(QPoint(150, 100), QSize(200, 30)));
-    PasswordEntery->setGeometry(QRect(QPoint(150, 140), QSize(200, 30)));
-    PasswordControlEntery->setGeometry(QRect(QPoint(150, 180), QSize(200, 30)));
+    nameEntery->setGeometry(QRect(QPoint(150, 100), QSize(200, 30)));
+    surnameEntery->setGeometry(QRect(QPoint(150, 140), QSize(200, 30)));
+    PasswordEntery->setGeometry(QRect(QPoint(150, 180), QSize(200, 30)));
+    PasswordControlEntery->setGeometry(QRect(QPoint(150, 220), QSize(200, 30)));
     // giriş bölmelerine yer tutucu eklenmesi (hiçbir giriş yokken kullanıcıya nereye ne gireceği hakkında bilgi verir)
-    IdEntery->setPlaceholderText("Id Entery");
+    nameEntery->setPlaceholderText("Name Entery");
+    surnameEntery->setPlaceholderText("Surname Entery");
     PasswordEntery->setPlaceholderText("Password Entery");
     PasswordControlEntery->setPlaceholderText("Password Control Entery");
-    IdEntery->setFocus();
+    nameEntery->setFocus();
 
     signUpButton = new QPushButton("Singup", this);
     // butonlar için boyut ve konum atamaları yapılması
-    signUpButton->setGeometry(QRect(QPoint(50, 220), QSize(300, 30)));
+    signUpButton->setGeometry(QRect(QPoint(50, 255), QSize(300, 30)));
 
     // Connect button sinyalinin fonksiyonlara bağlanması
     connect(signUpButton, &QPushButton::released, this, &SignUpScreen::signUpClicked);
@@ -44,7 +47,8 @@ SignUpScreen::SignUpScreen(QMainWindow *parent)
 void SignUpScreen::signUpClicked()
 {
     //datalar alınır
-    QString name=IdEntery->text();
+    QString name=nameEntery->text();
+    QString surname=surnameEntery->text();
     QString password=PasswordEntery->text();
     QString passwordControl=PasswordControlEntery->text();
     QMessageBox msgBox;
@@ -64,7 +68,7 @@ void SignUpScreen::signUpClicked()
     //uygun ise
     }else{
         // kayıt işlemi yapılmalıdır
-        if(signUp(name,password)){
+        if(signUp(name,surname,password)){
             //eğer kayıt işlemi başarılı ise
             msgBox.setText("Kayıt Başarılı!");
             msgBox.exec();

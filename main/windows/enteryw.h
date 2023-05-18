@@ -11,7 +11,8 @@ class EnteryScreen : public QMainWindow
 {
     private:
         //id ve password girişleri için olan widgetlerin ön tanımlaması
-        QLineEdit *IdEntery;
+        QLineEdit *nameEntery;
+        QLineEdit *surnameEntery;
         QLineEdit *PasswordEntery;
         QPushButton *signInButton;
         QPushButton *signUpButton;

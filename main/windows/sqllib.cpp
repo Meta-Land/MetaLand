@@ -22,7 +22,8 @@ void createLandTable(){
 void createPersonsTable(){
     QSqlQuery create;
     create.prepare( "CREATE TABLE IF NOT EXISTS persons (num INTEGER UNIQUE PRIMARY KEY,"
-                   "id VARCHAR(30),"
+                   "name VARCHAR(30),"
+                   "surname VARCHAR(30),"
                    "passwd VARCHAR(30),"
                    "money INTEGER,"
                    "food INTEGER,"
@@ -88,10 +89,10 @@ void createWorkersTable(){
 
 //eğer aranan isim ev parolada kişi bulunur ise o kişinin eşsiz verisi olan numarayı döndürür.
 //bulunamazsa -1 döndürür
-int IdPasswordControl(QString id,QString password)
+int IdPasswordControl(QString name,QString surname,QString password)
 {
     QSqlQuery query;
-    query.prepare("SELECT * FROM persons WHERE id = '"+id+"' and passwd = '"+password+"'");
+    query.prepare("SELECT * FROM persons WHERE name = '"+name+"' and surname = '"+surname+"' and passwd = '"+password+"'");
     query.exec();
     //query ilerliyorsa eşleşen bir data vardır yani id password eşleşmesi olumuştur.
     while (query.next()) {
@@ -99,7 +100,7 @@ int IdPasswordControl(QString id,QString password)
         qDebug() << num_get;
         return num_get;
     }
-    qDebug() << id << password;
+    qDebug() << name << surname << password;
     return -1;
 }
 
@@ -131,9 +132,9 @@ void delEliminated(){
     }
 }
 
-int IdControl(QString id){
+int IdControl(QString name, QString surname){
     QSqlQuery query;
-    query.prepare("SELECT * FROM persons WHERE id = '"+id+"'");
+    query.prepare("SELECT * FROM persons WHERE name = '"+name+"' and surname = '"+surname+"'");
     query.exec();
     //query ilerliyorsa eşleşen bir data vardır yani id password eşleşmesi olumuştur.
     while (query.next()) {
@@ -141,7 +142,7 @@ int IdControl(QString id){
         qDebug() << num_get;
         return num_get;
     }
-    qDebug() << id;
+    qDebug() << name;
     return -1;
 }
 
@@ -411,13 +412,13 @@ void setStartStuff(int numberOfManager, int startStuff)
     query.exec();
 }
 
-int signUp(QString id,QString password){
+int signUp(QString name,QString surname,QString password){
     //eğer bu isimde birisi bulunmadıysa
     int num = getBigestNum()+1;
-    if(IdControl(id) == -1){
+    if(IdControl(name, surname) == -1){
         QSqlQuery query;
         query.prepare("INSERT INTO `persons`  VALUES "
-                            "("+QString::number(num)+",'"+id+"','"+password+"',"+QString::number(getStartFood())+","
+                            "("+QString::number(num)+",'"+name+"','"+surname+"','"+password+"',"+QString::number(getStartFood())+","
                             ""+QString::number(getStartMoney())+","+QString::number(getStartStuff())+");");
     if(query.exec()){}
     }else{

@@ -3,8 +3,8 @@
 #include <QSqlQuery>
 
 QSqlDatabase GenDb();
-int IdPasswordControl(QString, QString);
-int IdControl(QString id);
+int IdPasswordControl(QString,QString, QString);
+int IdControl(QString name,QString surname);
 int getMoney(int);
 int getFood(int);
 int getStuff(int);
@@ -14,7 +14,7 @@ void setStuff(int,int);
 void createPersonsTable();
 void delTable(QString);
 //isim ve şifreyi, başlangıç değerleriyle data base a yazan fonksiyon
-int signUp(QString,QString);
+int signUp(QString,QString,QString);
 int getBigestNum();
 //elenen kullanıcıları(en fazla 10 adet) döndüren fonksiyon
 int * getEliminated();

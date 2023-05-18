@@ -5,21 +5,24 @@ EnteryScreen::EnteryScreen(QMainWindow *parent)
     : QMainWindow(parent)
 {
     //giriş bölümlerinin tanımlanması
-    IdEntery = new QLineEdit(this);
+    nameEntery = new QLineEdit(this);
+    surnameEntery = new QLineEdit(this);
     PasswordEntery = new QLineEdit(this);
     //giriş bölümlerine konum ve boyut atanması
-    IdEntery->setGeometry(QRect(QPoint(150, 100), QSize(200, 30)));
-    PasswordEntery->setGeometry(QRect(QPoint(150, 140), QSize(200, 30)));
+    nameEntery->setGeometry(QRect(QPoint(150, 100), QSize(200, 30)));
+    surnameEntery->setGeometry(QRect(QPoint(150, 140), QSize(200, 30)));
+    PasswordEntery->setGeometry(QRect(QPoint(150, 180), QSize(200, 30)));
     // giriş bölmelerine yer tutucu eklenmesi (hiçbir giriş yokken kullanıcıya nereye ne gireceği hakkında bilgi verir)
-    IdEntery->setPlaceholderText("Id Entery");
+    nameEntery->setPlaceholderText("Id Entery");
+    surnameEntery->setPlaceholderText("Surname Entery");
     PasswordEntery->setPlaceholderText("Password Entery");
-    IdEntery->setFocus();
+    nameEntery->setFocus();
 
     signInButton = new QPushButton("Singin", this);
     signUpButton = new QPushButton("Singup", this);
     // butonlar için boyut ve konum atamaları yapılması
-    signInButton->setGeometry(QRect(QPoint(50, 200), QSize(300, 30)));
-    signUpButton->setGeometry(QRect(QPoint(50, 235), QSize(300, 30)));
+    signInButton->setGeometry(QRect(QPoint(50, 220), QSize(300, 30)));
+    signUpButton->setGeometry(QRect(QPoint(50, 255), QSize(300, 30)));
 
     // Connect button sinyalinin fonksiyonlara bağlanması
     connect(signInButton, &QPushButton::released, this, &EnteryScreen::signInClicked);
@@ -36,18 +39,22 @@ EnteryScreen::EnteryScreen(QMainWindow *parent)
 void EnteryScreen::signInClicked()
 {
     //Kullanıcı giriş yapmak istemektedir ve datalar okunarak bir sonraki adıma ilerlenmelidir
-    QString name=IdEntery->text();
+    QString name=nameEntery->text();
+    QString surname=surnameEntery->text();
     QString password=PasswordEntery->text();
     QMessageBox msgBox;
     if(name == ""){
-        msgBox.setText("ID Bölümü Boş Geçilemez!");
+        msgBox.setText("isim Bölümü Boş Geçilemez!");
+        msgBox.exec();
+    }if(surname == ""){
+        msgBox.setText("soyisim Bölümü Boş Geçilemez!");
         msgBox.exec();
     }else if(password == ""){
         msgBox.setText("Password Bölümü Boş Geçilemez!");
         msgBox.exec();
     }else{
         // verilen id ve password bulundu ise eşsiz datasını döndürür. bulunamadıysa -1
-        int personNum = IdPasswordControl(name,password);
+        int personNum = IdPasswordControl(name,surname,password);
         if(personNum != -1){
             //id password bulunmuştur.
             qDebug() << "id password bulunmuştur.";
