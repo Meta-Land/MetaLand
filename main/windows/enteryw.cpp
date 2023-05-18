@@ -66,6 +66,7 @@ void EnteryScreen::signInClicked()
             //yeni sayfa
             thirdS= new gameScreen();
             thirdS->resize(1920,1080);
+            thirdS->setStyleSheet("background:rgb(152,208,182);");
             thirdS->move(0,0);
             thirdS->show();
             this->close();
