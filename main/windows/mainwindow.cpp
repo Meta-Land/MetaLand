@@ -12,6 +12,7 @@ Screen::Screen(QMainWindow *parent)
     : QMainWindow(parent)
 {
 
+
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
     int height = screenGeometry.height();
