@@ -58,11 +58,6 @@ void EnteryScreen::signInClicked()
         if(personNum != -1){
             //id password bulunmuştur.
             qDebug() << "id password bulunmuştur.";
-        }else{
-            //id ve password bulunamamıştır.
-            qDebug() << "id ve password bulunamamıştır.";
-            msgBox.setText("ID Ve Password Bulunamamıştır.");
-            msgBox.exec();
             //yeni sayfa
             thirdS= new gameScreen();
             thirdS->resize(1920,1080);
@@ -70,6 +65,12 @@ void EnteryScreen::signInClicked()
             thirdS->move(0,0);
             thirdS->show();
             this->close();
+        }else{
+            //id ve password bulunamamıştır.
+            qDebug() << "id ve password bulunamamıştır.";
+            msgBox.setText("ID Ve Password Bulunamamıştır.");
+            msgBox.exec();
+
         }
     }
 }
