@@ -11,7 +11,6 @@
 #include <QScreen>
 #include <QMessageBox>
 #include <QLayout>
-#include <string.h>
 
 using namespace std;
 QVector<QVector<QPushButton*>> arsaList;
@@ -31,14 +30,10 @@ QPushButton *market;
 QPushButton *mall;
 QPushButton *property;
 QPushButton *detailClose;
-
-
 gameScreen::gameScreen(QMainWindow *parent)
     : QMainWindow(parent)
 {
 
-
-    //oyun alanının genişliği vve boyunu bulma
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
     int heightS = screenGeometry.height();
@@ -46,22 +41,6 @@ gameScreen::gameScreen(QMainWindow *parent)
 
     height=heightS;
     width=widthS;
-
-    //oyun alanının arsa boyutlarını tutma r=satir sayisi c=sütun sayısı
-    QString gameSize=getGameSize(1);
-    QString r=gameSize[0];
-    QString c=gameSize[2];
-
-    qDebug() <<r ;
-    qDebug() <<c ;
-
-
-    //boyutların atanması
-    int row=r.toInt();
-    int col=c.toInt();
-    int y=0;
-    int x=0;
-    //oyun alanında kullanılacak görsellerin yollarını tutma
     //////////////////////
     QPixmap pixMarket("../main/Assets/market.png");
     QIcon ButtonMarket(pixMarket);
@@ -78,25 +57,16 @@ gameScreen::gameScreen(QMainWindow *parent)
     QPixmap pixCoin("../main/Assets/coin.png");
     QIcon ButtonCoin(pixCoin);
 
-    //database'den para miktarını çeker
-    int coinS=getMoney(1);
-    QString stCoin=QString::number(coinS);
-    Lcoin= new QLabel(stCoin,this);
+
+    Lcoin= new QLabel("sdfs",this);
     Lcoin->setGeometry(QRect(QPoint(widthS-210,110), QSize(150,60)));
     Lcoin->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 30px");
-    //database'den yemek miktarını çeker
-    int foodS=getMoney(1);
-    QString stFood=QString::number(foodS);
-    Lcoin= new QLabel(stFood,this);
-    Lfood= new QLabel(stFood,this);
+
+    Lfood= new QLabel("sdf",this);
     Lfood->setGeometry(QRect(QPoint(widthS-210,210), QSize(150,60)));
     Lfood->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 30px");
 
-    //database'den eşya miktarını çeker
-    int stuffS=getMoney(1);
-    QString stStuff=QString::number(stuffS);
-    Lcoin= new QLabel(stCoin,this);
-    Lstuff= new QLabel(stCoin,this);
+    Lstuff= new QLabel("sdf",this);
     Lstuff->setGeometry(QRect(QPoint(widthS-210,310), QSize(150,60)));
     Lstuff->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 30px");
 
@@ -114,16 +84,40 @@ gameScreen::gameScreen(QMainWindow *parent)
     stuff->setPixmap(pixStuff.scaled(80,80));
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 
-    y=(heightS/2)-(35*(row-1)/2)-100;
-    x =(widthS/2)-(100*col/2)-(row/2*50);
+
+
+//////////////////////////////////////////////
+
+
+    //boyutların atanması
+    int row=5;
+    int col =5;
+    int y=0;
+    int x=0;
+
+    //satir sayisi çift ise
+    if(row%2==0){
+        y=(heightS/2)-(100*row/2);
+    }
+    //sutun sayisi çift ise
+    if(col%2==0){
+        x=(widthS/2)-(100*col/2*2);
+    }
+    //satir sayisi tek ise
+    if(row%2!=0){
+        y=(heightS/2)-(100*row/2)+50;
+    }
+    //sutun sayisi tek ise
+    if(col%1==0){
+        x=(widthS/2)-(100*col/2*2)+50;
+    }
 
     int xTemp=x;
     QPixmap pix("../main/Assets/grass.png");
     QIcon ButtonIcon(pix);
 
-    //ARSALARI OLUŞTURAN VE OYUN ALANINA YERLEŞTİREN FONKSİYON
+    //2d vector oluşturulması
     for( auto i=0;i<row;i++)
     {
         QVector<QPushButton*> list2;
@@ -152,18 +146,8 @@ gameScreen::gameScreen(QMainWindow *parent)
         y+=35;
     }
 
-    for(int i=0;i<row;i++){
-        for(int j=0;j<col;j++){
-            QString rowNum=QString::number(i);
-            QString colNum=QString::number(j);
-            QString LandNum=rowNum+"x"+colNum;
-            QString LandType=getLandType(LandNum);
-            qDebug() <<LandType;
-        }
-    }
 
-    //yöneticiye ait olan emlak, mağaza ve marketin rastgele atanması
-     /*
+
     //arsaya emlak etanması
     arsaList[0][0]->setIcon(ButtonProperty);
     arsaList[0][0]->setIconSize(QSize(50,50));
@@ -178,7 +162,6 @@ gameScreen::gameScreen(QMainWindow *parent)
     arsaList[0][2]->setIcon(ButtonMall);
     arsaList[0][2]->setIconSize(QSize(50,50));
     arsaID[0][2]=3;
-   */
 
     //emlak için label oluşturulması
     buyGrassLabel= new QLabel("",this);
@@ -212,8 +195,6 @@ gameScreen::gameScreen(QMainWindow *parent)
         p+=55;
         m=10;
     }
-
-
 
 
     //arsaya tıklandığında gerçekleştirilecek fonksiyonlar
@@ -275,6 +256,7 @@ gameScreen::gameScreen(QMainWindow *parent)
                         arsaList[i][j]->setIconSize(QSize(50,50));
                         arsaID[i][j]=1;
                     }
+
 
                 }
 

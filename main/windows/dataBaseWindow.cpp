@@ -41,10 +41,14 @@ void DataBaseScreen::GameSelectClicked(){
     QString schema = schemaBox->currentText();
     if(connectDataBaseSchema(schema)){
         this->close();
+        qDebug() << schema;
+        managerScreen = new ManagerScreen();
+        managerScreen->resize(1920,1080);
+        managerScreen->move(0, 0);
+        managerScreen->show();
     }else{
 
     }
-    qDebug() << schema;
 }
 
 void DataBaseScreen::newGameClicked(){

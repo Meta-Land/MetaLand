@@ -58,7 +58,7 @@ Screen::Screen(QMainWindow *parent)
 void Screen::manager_clicked()
 {
     //2. pencereye geçiş işleminin yapılaması
-    secW = new EnteryScreen();
+    secW = new EnteryScreen("manager");
     secW->resize(1920,1080);
     secW->move(0, 0);
     secW->show();
@@ -68,7 +68,7 @@ void Screen::manager_clicked()
 void Screen::player_clicked()
 {
     //2. pencereye geçiş işleminin yapılaması
-    secW = new EnteryScreen();
+    secW = new EnteryScreen("player");
     secW->resize(1920,1080);
     secW->move(0, 0);
     secW->show();

@@ -3,15 +3,26 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QMessageBox>
+#include <QComboBox>
+#include <QSqlDatabase>
 #include "signUpW.h"
 #include "gamew.h"
+#include "./managerW.h"
 
 class EnteryScreen : public QMainWindow
 
 {
     private:
         //id ve password girişleri için olan widgetlerin ön tanımlaması
+        QSqlDatabase *db;
         QLineEdit *nameEntery;
+        QLineEdit *gameNameEntery;
+        QComboBox *schemaBox;
+        QPushButton *gameSelectButton;
+        QPushButton *newGameButton;
+        QLabel *newGameLabel;
+        QLabel *gameLabel;
+        ManagerScreen *managerScreen;
         QLineEdit *surnameEntery;
         QLineEdit *PasswordEntery;
         QPushButton *signInButton;
@@ -25,10 +36,15 @@ class EnteryScreen : public QMainWindow
 
     // Fonksiyon ön tanımlamaları slots bölümünde yapılıyor.
     private slots:
-        void signInClicked();
+        bool signIn(QString managerPlayer);
         void signUpClicked();
+        void gameSelectClicked(QString managerPlayer);
+        void newGameClicked();
+        void updatecombo();
+        void dbConnect();
 
     public:
-        EnteryScreen(QMainWindow *parent = nullptr);
+        EnteryScreen(QString managerPlayer,QMainWindow *parent = nullptr);
         ~EnteryScreen();
 };
+

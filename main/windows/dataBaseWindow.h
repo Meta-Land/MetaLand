@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include "sqllib.h"
 #include <QLabel>
+#include "./managerW.h"
 
 class DataBaseScreen : public QMainWindow
 
@@ -17,6 +18,7 @@ class DataBaseScreen : public QMainWindow
         QPushButton *newGameButton;
         QLabel *newGameLabel;
         QLabel *gameLabel;
+        ManagerScreen *managerScreen;
 
     // Fonksiyon ön tanımlamaları slots bölümünde yapılıyor.
     private slots:

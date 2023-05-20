@@ -6,12 +6,14 @@ void createSchema(QString Schema){
     QSqlQuery create;
     create.prepare("CREATE SCHEMA `"+Schema+"` ;");
     create.exec();
+    connectDataBaseSchema(Schema);
     //create tables
     createLandTable();
     createPersonsTable();
     createManagerTable();
     createBusinessTable();
     createWorkersTable();
+    signUpRoot("root","root","root");
     initManager();
 }
 
@@ -45,11 +47,11 @@ bool connectDataBaseSchema(QString schema)
     //db.setDatabaseName("first_sql");
     if(db.open()){
         msgBox.setText("SQL Database Connection Done!");
-        msgBox.exec();
+        //msgBox.exec();
         return true;
     }else{
         msgBox.setText("SQL Database Connection Error!");
-        msgBox.exec();
+        //msgBox.exec();
         return false;
     }
 }
@@ -187,8 +189,7 @@ void getSchemas(QString *Schemas){
 
 //eğer aranan isim ev parolada kişi bulunur ise o kişinin eşsiz verisi olan numarayı döndürür.
 //bulunamazsa -1 döndürür
-int IdPasswordControl(QString name,QString surname,QString password)
-{
+int IdPasswordControl(QString name,QString surname,QString password,QString managerPlayer){
     QSqlQuery query;
     query.prepare("SELECT * FROM persons WHERE name = '"+name+"' and surname = '"+surname+"' and passwd = '"+password+"'");
     query.exec();
@@ -196,7 +197,18 @@ int IdPasswordControl(QString name,QString surname,QString password)
     while (query.next()) {
         int num_get = query.value(0).toInt();
         qDebug() << num_get;
-        return num_get;
+        if(managerPlayer == "player"){
+            if(num_get == 0){
+                return -1;
+            }
+            return num_get;
+        }else{
+            qDebug() <<"here" << num_get;
+            if(num_get == 0){
+                qDebug() <<"here";
+                return num_get;
+            }
+        }
     }
     qDebug() << name << surname << password;
     return -1;
@@ -525,6 +537,21 @@ int signUp(QString name,QString surname,QString password){
         msgBox.exec();
     }
     return num;
+}
+
+void signUpRoot(QString name,QString surname,QString password){
+    //eğer bu isimde birisi bulunmadıysa
+    if(IdControl(name, surname) == -1){
+        QSqlQuery query;
+        query.prepare("INSERT INTO `persons`  VALUES "
+                      "("+QString::number(0)+",'"+name+"','"+surname+"','"+password+"',"+QString::number(getStartFood())+","
+                                                                                                                                           ""+QString::number(getStartMoney())+","+QString::number(getStartStuff())+");");
+        if(query.exec()){}
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("Bu Kullanıcı Adı Zaten Kullanımda!");
+        msgBox.exec();
+    }
 }
 
 void updateDailyExpense(int personNum){

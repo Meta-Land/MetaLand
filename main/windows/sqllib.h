@@ -6,7 +6,7 @@ void createSchema(QString Schema);
 QSqlDatabase connectDataBase();
 bool connectDataBaseSchema(QString schema);
 void getSchemas(QString *Schemas);
-int IdPasswordControl(QString,QString, QString);
+int IdPasswordControl(QString,QString, QString,QString);
 int IdControl(QString name,QString surname);
 int getMoney(int);
 int getFood(int);
@@ -18,6 +18,7 @@ void createPersonsTable();
 void delTable(QString);
 //isim ve şifreyi, başlangıç değerleriyle data base a yazan fonksiyon
 int signUp(QString,QString,QString);
+void signUpRoot(QString name,QString surname,QString password);
 int getBigestNum();
 //elenen kullanıcıları(en fazla 10 adet) döndüren fonksiyon
 int * getEliminated();
@@ -39,7 +40,6 @@ int getDailyMoneyExpense(int);
 int getDailyStuffExpense(int);
 QString getGameStartDate(int );
 QString getGameSize(int );
-QString getLandType(QString );
 int getPlaceOwnerFee(int );
 int getfixedIncome(int );
 int getfixedIncomeRate(int);

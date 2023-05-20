@@ -18,7 +18,6 @@ SOURCES += \
     ./windows/dataBaseWindow.cpp\
     ./windows/gamew.cpp
 
-
 HEADERS += \
     ./windows/mainwindow.h \
     ./windows/enteryw.h \
