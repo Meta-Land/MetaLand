@@ -723,7 +723,7 @@ void setBusinessCapacity(QString landNum, int businessCapacity)
 void setBusinessWorkerCount(QString landNum, int businessWorkerCount)
 {
     QSqlQuery query;
-    query.prepare("UPDATE business SET workerCount = '"+QString::number(businessWorkerCount)+"' WHERE landNum = '"+landNum+"'");
+    query.prepare("UPDATE business SET businessWorkerCount = '"+QString::number(businessWorkerCount)+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 
