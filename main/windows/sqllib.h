@@ -105,6 +105,14 @@ bool isPersonWorking(int num);
 
 int getWorkerFee(QString landNum);
 
+
+int getLandFoodPrice(QString landNum);
+int getLandStuffPrice(QString landNum);
+int getLandWorkerFee(QString landNum);
+int getLandNumberOfWorkingDays(QString landNum);
+int getLandWorkingHours(QString landNum);
+
+
 void newStore(QString landNum, int foodPrice,int workerFee,
               int numberOfWorkingDays, int workingHours);
 void newMarket(QString landNum, int stuffPrice,int workerFee,

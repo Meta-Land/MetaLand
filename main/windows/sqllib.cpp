@@ -878,6 +878,16 @@ int getLandStuffPrice(QString landNum){
     return stuffPrice;
 }
 
+int getLandFoodPrice(QString landNum){
+    QSqlQuery query;
+    query.prepare("SELECT foodPrice FROM "+getLandType(landNum)+"s WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int foodPrice = query.value(0).toInt();
+    qDebug() << foodPrice;
+    return foodPrice;
+}
+
 int getLandNumberOfWorkingDays(QString landNum){
     QSqlQuery query;
     query.prepare("SELECT numberOfWorkingDays FROM "+getLandType(landNum)+"s WHERE landNum = '"+landNum+"'");
