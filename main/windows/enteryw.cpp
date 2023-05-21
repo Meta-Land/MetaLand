@@ -80,7 +80,7 @@ bool EnteryScreen::signIn(QString managerPlayer)
         msgBox.exec();
     }else{
         // verilen id ve password bulundu ise eşsiz datasını döndürür. bulunamadıysa -1
-        int personNum = IdPasswordControl(name,surname,password,managerPlayer);
+        personNum = IdPasswordControl(name,surname,password,managerPlayer);
         if(personNum != -1){
             //id password bulunmuştur.
             qDebug() << "id password bulunmuştur.";
@@ -127,6 +127,7 @@ void EnteryScreen::gameSelectClicked(QString managerPlayer){
                 thirdS= new gameScreen();
                 thirdS->resize(1920,1080);
                 thirdS->setStyleSheet("background:rgb(152,208,182);");
+                thirdS->personNum1=personNum;
                 thirdS->move(0,0);
                 thirdS->show();
                 this->close();

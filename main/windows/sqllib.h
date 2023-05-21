@@ -41,6 +41,8 @@ int getDailyStuffExpense(int);
 QString getGameStartDate(int );
 QString getGameSize(int );
 QString getLandType(QString );
+QString getLandOwnerName(QString);
+QString getLandOwnerNum(QString);
 int getPlaceOwnerFee(int );
 int getfixedIncome(int );
 int getfixedIncomeRate(int);

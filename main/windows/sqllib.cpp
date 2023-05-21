@@ -613,11 +613,33 @@ QString getLandType(QString landNum)
     qDebug() << LandType;
     return LandType;
 }
+//////////////////
+QString getLandOwnerName(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT persons.name FROM land, persons WHERE land.landNum = '"+landNum+"' AND land.landOwner=persons.num");
+    query.exec();
+    query.next();
+    QString LandOwnerName = query.value(0).toString();
+    qDebug() << LandOwnerName;
+    return LandOwnerName;
+}
+
+QString getLandOwnerNum(QString landNum)
+{
+    QSqlQuery query;
+    query.prepare("SELECT landOwner FROM land WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    QString LandOwnerNum = query.value(0).toString();
+    qDebug() << LandOwnerNum;
+    return LandOwnerNum;
+}
 
 void setLandOwner(QString landNum, int landOwner)
 {
     QSqlQuery query;
-    query.prepare("UPDATE land SET landType = '"+QString::number(landOwner)+"' WHERE landNum = '"+landNum+"'");
+    query.prepare("UPDATE land SET landOwner = '"+QString::number(landOwner)+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 

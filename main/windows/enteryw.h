@@ -31,6 +31,7 @@ class EnteryScreen : public QMainWindow
         QLabel *picLabel;
         SignUpScreen *secW;
         gameScreen* thirdS;
+        int personNum;
 
         Q_OBJECT
 
