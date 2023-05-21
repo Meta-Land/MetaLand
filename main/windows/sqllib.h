@@ -96,5 +96,14 @@ void updateWorker(int, QString, int,QString, QString , int , int );
 int* getContractEndedWorkers(QString date);
 void delContractEndedWorkers(QString date);
 
+void createMarketTable();
+void createStoreTable();
+void createLandagentTable();
+
 int * getWorkersAtBussiness(QString workinglandNum);
 bool isPersonWorking(int num);
+
+int getWorkerFee(QString landNum);
+
+void newStore(QString landNum, int stuffPrice);
+void newStore(QString landNum, int foodPrice);

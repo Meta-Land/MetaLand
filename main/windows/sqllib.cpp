@@ -13,6 +13,9 @@ void createSchema(QString Schema){
     createManagerTable();
     createBusinessTable();
     createWorkersTable();
+    createMarketTable();
+    createStoreTable();
+    createLandagentTable();
     signUpRoot("root","root","root");
     initManager();
 }
@@ -142,7 +145,7 @@ void createWorkersTable(){
     }
 }
 
-void CreateMarketTable(){
+void createMarketTable(){
     QSqlQuery create;
     create.prepare("CREATE TABLE IF NOT EXISTS markets (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
                    "foodPrice INTEGER)");
@@ -153,7 +156,7 @@ void CreateMarketTable(){
     }
 }
 
-void CreateStoreTable(){
+void createStoreTable(){
     QSqlQuery create;
     create.prepare("CREATE TABLE IF NOT EXISTS stores (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
                    "stuffPrice INTEGER)");
@@ -164,7 +167,7 @@ void CreateStoreTable(){
     }
 }
 
-void CreateLandagentTable(){
+void createLandagentTable(){
     QSqlQuery create;
     create.prepare("CREATE TABLE IF NOT EXISTS landagents (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
                    "stuffPrice INTEGER)");
@@ -803,6 +806,20 @@ void newWorker(int workerNo, QString workinglandNum, int workerFee,QString start
     }
 }
 
+void newMarket(QString landNum, int foodPrice){
+    QSqlQuery query;
+    query.prepare("INSERT INTO `markets` VALUES (landNum, :foodPrice);");
+    query.bindValue(":landNum", landNum);
+    query.bindValue(":foodPrice", foodPrice);
+}
+
+void newStore(QString landNum, int stuffPrice){
+    QSqlQuery query;
+    query.prepare("INSERT INTO `markets` VALUES (landNum, :stuffPrice);");
+    query.bindValue(":landNum", landNum);
+    query.bindValue(":stuffPrice", stuffPrice);
+}
+
 void updateWorker(int workerNo, QString workinglandNum, int workerFee,QString startToWorkDate,
                QString stopToWorkDate, int numberOfWorkingDays, int workingHours){
     QSqlQuery query;
@@ -819,6 +836,18 @@ void updateWorker(int workerNo, QString workinglandNum, int workerFee,QString st
 
     }else{
         qDebug()<<"update Worker error";
+    }
+}
+
+int getWorkerFee(int workerNo){
+    {
+        QSqlQuery query;
+        query.prepare("SELECT workerFee FROM workers WHERE workerNo = '"+QString::number(workerNo)+"'");
+        query.exec();
+        query.next();
+        int workerFee = query.value(0).toInt();
+        qDebug() << workerFee;
+        return workerFee;
     }
 }
 
