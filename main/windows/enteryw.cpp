@@ -81,6 +81,7 @@ bool EnteryScreen::signIn(QString managerPlayer)
     }else{
         // verilen id ve password bulundu ise eşsiz datasını döndürür. bulunamadıysa -1
         personNum = IdPasswordControl(name,surname,password,managerPlayer);
+        qDebug() <<"numara" <<personNum;
         if(personNum != -1){
             //id password bulunmuştur.
             qDebug() << "id password bulunmuştur.";
@@ -116,18 +117,19 @@ void EnteryScreen::gameSelectClicked(QString managerPlayer){
     QString schema = schemaBox->currentText();
     if(connectDataBaseSchema(schema)){
         if(signIn(managerPlayer)){
-            this->close();
+            //this->close();
             if(managerPlayer == "manager"){
                 qDebug() << schema;
                 managerScreen = new ManagerScreen();
                 managerScreen->resize(1920,1080);
                 managerScreen->move(0, 0);
                 managerScreen->show();
+                this->close();
             }else{
-                thirdS= new gameScreen();
+                thirdS= new gameScreen(personNum);
                 thirdS->resize(1920,1080);
                 thirdS->setStyleSheet("background:rgb(152,208,182);");
-                thirdS->personNum1=personNum;
+                qDebug() << "selam "<<thirdS->personNum1;
                 thirdS->move(0,0);
                 thirdS->show();
                 this->close();

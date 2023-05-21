@@ -10,7 +10,7 @@ class gameScreen:  public QMainWindow
 {
     Q_OBJECT
     public:
-        gameScreen(QMainWindow *parent = nullptr);
+        gameScreen(int personNum,QMainWindow *parent = nullptr);
         ~gameScreen();
         int personNum1;
 
@@ -22,10 +22,12 @@ class gameScreen:  public QMainWindow
         void LandDetail();
         void showDetail(int, int);
         void buyGrass(int x,int y);
+        void shopping(int i, int j);
         void upDate();
+        void work(int i,int j);
     private:
 
-        QLineEdit *satir;
+        QLineEdit *shopAmount;
         QLineEdit *sutun;
         QLabel *coin;
         QLabel *stuff;
@@ -35,11 +37,14 @@ class gameScreen:  public QMainWindow
         QLabel *landOwnerDetail;
         QLabel *workersDetail;
         QLabel *workerCapacityDetail;
-
-
+        QLabel *shoppingLabel;
+        QLabel *priceLabel;
         QLabel *Lcoin;
         QLabel *Lstuff;
         QLabel *Lfood;
+        QPushButton *buy;
+        QPushButton *userBtn;
+        QLabel *userLabel;
 
         /*QPushButton *market;
         QPushButton *property;

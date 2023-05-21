@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QLayout>
 #include <string.h>
+#include <QDate>
 
 using namespace std;
 QVector<QVector<QPushButton*>> arsaList;
@@ -34,12 +35,14 @@ QPushButton *property;
 QPushButton *buyLandClose;
 QPushButton *detailClose;
 int row,col;
+int num;
 
-gameScreen::gameScreen(QMainWindow *parent)
+gameScreen::gameScreen(int personNum,QMainWindow *parent)
     : QMainWindow(parent)
 {
 
-
+    personNum1=personNum;
+    //qDebug() <<"asdfs"<<num;
     //oyun alanının genişliği vve boyunu bulma
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
@@ -79,41 +82,63 @@ gameScreen::gameScreen(QMainWindow *parent)
     QIcon ButtonStuff(pixStuff);
     QPixmap pixCoin("../main/Assets/coin.png");
     QIcon ButtonCoin(pixCoin);
+    QPixmap pixUser("../main/Assets/user.png");
+    QIcon ButtonUser(pixUser);
+
+    //user section
+    userBtn= new QPushButton("",this);
+    userBtn->setGeometry(QRect(QPoint(widthS-100,40), QSize(50,50)));
+    userBtn->setIcon(ButtonUser);
+    userBtn->setIconSize(QSize(50,50));
+
+    QString userName=getPersonName(personNum1);
+    QString userSurname=getPersonSurname(personNum1);
+    QString numSt=QString::number(personNum1);
+
+    qDebug() <<"numara:" <<userName;
+
+
+//<big>I'm big!</big><br>
+    userLabel= new QLabel("",this);
+    userLabel->setGeometry(QRect(QPoint(widthS-260,45), QSize(150,100)));
+    userLabel->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 15px");
+    userLabel->setText("<big>İsim Soyisim:</big>"+userName+" "+userSurname+"<br>"
+                        "<big>Numara:</big>"+ numSt+"<br>"
+                       "<big>Çalıştığı İşletme:</big>");
+
 
     //database'den para miktarını çeker
     int coinS=getMoney(1);
     QString stCoin=QString::number(coinS);
     Lcoin= new QLabel(stCoin,this);
-    Lcoin->setGeometry(QRect(QPoint(widthS-210,110), QSize(150,60)));
-    Lcoin->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 30px");
+    Lcoin->setGeometry(QRect(QPoint(widthS-210,150), QSize(100,35)));
+    Lcoin->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 15px");
     //database'den yemek miktarını çeker
-    int foodS=getMoney(1);
+    int foodS=getFood(1);
     QString stFood=QString::number(foodS);
-    Lcoin= new QLabel(stFood,this);
     Lfood= new QLabel(stFood,this);
-    Lfood->setGeometry(QRect(QPoint(widthS-210,210), QSize(150,60)));
-    Lfood->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 30px");
+    Lfood->setGeometry(QRect(QPoint(widthS-210,205), QSize(100,35)));
+    Lfood->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 15px");
 
     //database'den eşya miktarını çeker
-    int stuffS=getMoney(1);
+    int stuffS=getStuff(1);
     QString stStuff=QString::number(stuffS);
-    Lcoin= new QLabel(stCoin,this);
     Lstuff= new QLabel(stCoin,this);
-    Lstuff->setGeometry(QRect(QPoint(widthS-210,310), QSize(150,60)));
-    Lstuff->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 30px");
+    Lstuff->setGeometry(QRect(QPoint(widthS-210,280), QSize(100,35)));
+    Lstuff->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 15px");
 
     //coin label
     coin= new QLabel("",this);
-    coin->setGeometry(QRect(QPoint(widthS-100,100), QSize(80,80)));
-    coin->setPixmap(pixCoin.scaled(80,80));
+    coin->setGeometry(QRect(QPoint(widthS-100,100), QSize(55,55)));
+    coin->setPixmap(pixCoin.scaled(55,55));
     //yemek label
     food= new QLabel("",this);
-    food->setGeometry(QRect(QPoint(widthS-100,200), QSize(80,80)));
-    food->setPixmap(pixFood.scaled(80,80));
+    food->setGeometry(QRect(QPoint(widthS-100,165), QSize(55,55)));
+    food->setPixmap(pixFood.scaled(55,55));
     //stuff label
     stuff= new QLabel("",this);
-    stuff->setGeometry(QRect(QPoint(widthS-100,300), QSize(80,80)));
-    stuff->setPixmap(pixStuff.scaled(80,80));
+    stuff->setGeometry(QRect(QPoint(widthS-100,230), QSize(55,55)));
+    stuff->setPixmap(pixStuff.scaled(55,55));
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -166,9 +191,12 @@ gameScreen::gameScreen(QMainWindow *parent)
             setLandType("0x0","landAgent");
             setLandType("0x1","store");
             setLandType("0x2","market");
-            if(LandType=="1"){
-                setLandType(LandNum,"");
-            }
+
+            newBusiness("0x0","landAgent",1,3,0);
+            newBusiness("0x1","store",1,3,0);
+            newBusiness("0x2","market",1,3,0);
+
+
             if(LandType=="store"){
                 arsaList[i][j]->setIcon(ButtonMall);
                 arsaList[i][j]->setIconSize(QSize(50,50));
@@ -208,6 +236,32 @@ gameScreen::gameScreen(QMainWindow *parent)
     detailClose->setStyleSheet("background-color:rgb(255, 100, 100);" "border-radius: 5px");
     detailClose->setText("X");
 
+    //alışveriş yapmak için yapılan sekme
+    shoppingLabel=new QLabel("",this);
+    shoppingLabel->setGeometry(QRect(QPoint(widthS/2-200,heightS/2-200), QSize(400,250)));
+    shoppingLabel->setStyleSheet("background-color :rgb(248, 255, 219);" "border-radius: 5px");
+    shoppingLabel->setVisible(false);
+
+    //birim fiyat gösteren label
+    priceLabel=new QLabel("",shoppingLabel);
+    priceLabel->setGeometry(QRect(QPoint(100,10), QSize(200,70)));
+    priceLabel->setText("birim fiyat:");
+    priceLabel->setStyleSheet("background-color :rgb(255, 180, 180);" "border-radius: 5px");
+
+    // `ne birim alışveriş yapmak istiyorsun` line editi
+    shopAmount=new QLineEdit("",shoppingLabel);
+    shopAmount->setGeometry(QRect(QPoint(100,90), QSize(200,70)));
+    shopAmount->setStyleSheet("background-color :rgb(255, 180, 180);" "border-radius: 5px");
+    shopAmount->setPlaceholderText("Almak istediğiniz miktar");
+
+
+    //buy button
+    buy= new QPushButton("",shoppingLabel);
+    buy->setText("buy");
+    buy->setGeometry(QRect(QPoint(170,170), QSize(60,40)));
+    buy->setStyleSheet("background-color :rgb(255, 100, 100);" "border-radius: 5px");
+
+
     landTypeDetail=new QLabel("",detailLabel);
     landTypeDetail->setGeometry(QRect(QPoint(100,10), QSize(200,70)));
     landTypeDetail->setStyleSheet("background-color :rgb(255, 180, 180);" "border-radius: 5px");
@@ -228,13 +282,6 @@ gameScreen::gameScreen(QMainWindow *parent)
     workerCapacityDetail->setStyleSheet("background-color :rgb(255, 180, 180);" "border-radius: 5px");
 
 
-
-/*
- *      QLabel *landTypeDetail;
-        QLabel *landOwnerDetail;
-        QLabel *workersDetail;
-        QLabel *workerCapacityDetail;
-*/
     //detay tablosu için 2d vektor oluşturma
     int m=10;
     int p=10;
@@ -287,7 +334,7 @@ void gameScreen::LandDetail()
                 arsaListDetail[i][j]->setStyleSheet("background-color:rgb(255, 125, 125)");
             }
             //arsa satın alınacak ise
-            if(LandType==""){
+            if(LandType=="land"){
                 arsaListDetail[i][j]->setStyleSheet("background-color:rgb(93, 156, 89)");
                 connect (arsaListDetail[i][j], & QPushButton :: clicked, this, [=] () -> void {
                     buyGrass(i,j);
@@ -320,14 +367,21 @@ void gameScreen::buyGrass(int i,int j){
         arsaList[i][j]->setIcon(ButtonFarm);
         arsaList[i][j]->setIconSize(QSize(100,100));
         setLandType(LandNum,"empty");
-        upDate();
         setLandOwner(LandNum, personNum1);
+        upDate();
+
     }//satın almayı iptal et
     else if(msgBox.clickedButton() == btn2) {
 
     }
 }
+void gameScreen::shopping(int i,int j){
+    shoppingLabel->setVisible(true);
 
+    connect (buy, & QPushButton :: clicked, this, [=] () -> void {
+        shoppingLabel->setVisible(false);
+    });
+}
 
 void gameScreen::buildMarket(int x,int y)
 {
@@ -336,9 +390,11 @@ void gameScreen::buildMarket(int x,int y)
     QString LandNum=rowNum+"x"+colNum;
     QPixmap pixMarket("../main/Assets/market.png");
     QIcon ButtonMarket(pixMarket);
+    newBusiness(LandNum,"market",1,3,0);
     arsaList[x][y]->setIcon(ButtonMarket);
-    arsaList[x][y]->setIconSize(QSize(80,80));
+    arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"market");
+    update();
 }
 void gameScreen::buildMall(int x,int y)
 {
@@ -347,6 +403,8 @@ void gameScreen::buildMall(int x,int y)
     QString LandNum=rowNum+"x"+colNum;
     QPixmap pixMall("../main/Assets/mall.png");
     QIcon ButtonMall(pixMall);
+    newBusiness(LandNum,"store",1,3,0);
+
     arsaList[x][y]->setIcon(ButtonMall);
     arsaList[x][y]->setIconSize(QSize(80,80));
     setLandType(LandNum,"store");
@@ -358,6 +416,8 @@ void gameScreen::buildProperty(int x,int y)
     QString LandNum=rowNum+"x"+colNum;
     QPixmap pixProperty("../main/Assets/property.png");
     QIcon ButtonProperty(pixProperty);
+    newBusiness(LandNum,"landAgent",1,3,0);
+
     arsaList[x][y]->setIcon(ButtonProperty);
     arsaList[x][y]->setIconSize(QSize(80,80));
     setLandType(LandNum,"landAgent");
@@ -371,8 +431,8 @@ void gameScreen::showDetail(int i,int j)
     QString LandType=getLandType(LandNum);
     QString LandOwnerName=getLandOwnerName(LandNum);
     QString LandOwnerNum =getLandOwnerNum(LandNum);
-    int workerNum=getBussinessWorkerCount(LandNum);
-    QString workerNumSt=QString::number(workerNum);
+    int workerCount=getBusinessWorkerCount(LandNum);
+    QString workerNumSt=QString::number(workerCount);
     /*
     *   QLabel *landTypeDetail;
         QLabel *landOwnerDetail;
@@ -391,6 +451,22 @@ void gameScreen::showDetail(int i,int j)
         detailLabel->setVisible(false);
     });
 }
+
+void gameScreen::work(int i,int j)
+{
+    QString rowNum=QString::number(i);
+    QString colNum=QString::number(j);
+    QString LandNum=rowNum+"x"+colNum;
+    int workerNum=getBusinessWorkerCount(LandNum);
+    QString workerNumSt=QString::number(workerNum);
+    QDate Today = QDate::currentDate();
+    QString startDate = Today.toString("");
+    Today.addDays(3);
+    QString finishDate=Today.toString("yyyy-MM-dd");
+    newWorker(personNum1,LandNum,100,"1-1-1","1-1-1",3,3);
+}
+
+
 
 void gameScreen::upDate()
 {
@@ -416,11 +492,15 @@ for(int i=0;i<row;i++){
                     QPushButton* btnDetail = msgBox.addButton(tr("Detay"), QMessageBox::ActionRole);
                     QPushButton* btnBuyGrass = msgBox.addButton(tr("Arsa Satın Al"), QMessageBox::ActionRole);
                     QPushButton* btnWork = msgBox.addButton(tr("Çalış"), QMessageBox::ActionRole);
+                    QPushButton* btnExit = msgBox.addButton(tr("Çıkış"), QMessageBox::ActionRole);
+
                     msgBox.exec();
                     if(msgBox.clickedButton() == btnBuyGrass){
                         LandDetail();
-                    }if(msgBox.clickedButton() == btnDetail){
+                    }else if(msgBox.clickedButton() == btnDetail){
                         showDetail(i,j);
+                    }else if(msgBox.clickedButton() == btnWork){
+                        work(i,j);
                     }
                 }
                 //tıklanılan arsa market ise
@@ -428,11 +508,18 @@ for(int i=0;i<row;i++){
                     QMessageBox msgBox;
                     msgBox.setText("hangi işlemi yapmak istiyorsun?");
                     QPushButton* btnDetail = msgBox.addButton(tr("Detay"), QMessageBox::ActionRole);
-                    QPushButton* btnBuyGrass = msgBox.addButton(tr("yiyecek Satın Al"), QMessageBox::ActionRole);
+                    QPushButton* btnBuy = msgBox.addButton(tr("yiyecek Satın Al"), QMessageBox::ActionRole);
                     QPushButton* btnWork = msgBox.addButton(tr("Çalış"), QMessageBox::ActionRole);
+                    QPushButton* btnExit = msgBox.addButton(tr("Çıkış"), QMessageBox::ActionRole);
+
                     msgBox.exec();
                     if(msgBox.clickedButton() == btnDetail){
                         showDetail(i,j);
+                    }else if(msgBox.clickedButton() == btnWork){
+                        work(i,j);
+
+                    }else if(msgBox.clickedButton() == btnBuy){
+                        shopping(i,j);
                     }
 
                 }
@@ -441,11 +528,17 @@ for(int i=0;i<row;i++){
                     QMessageBox msgBox;
                     msgBox.setText("hangi işlemi yapmak istiyorsun?");
                     QPushButton* btnDetail = msgBox.addButton(tr("Detay"), QMessageBox::ActionRole);
-                    QPushButton* btnBuyGrass = msgBox.addButton(tr("Eşya Satın Al"), QMessageBox::ActionRole);
+                    QPushButton* btnBuy = msgBox.addButton(tr("Eşya Satın Al"), QMessageBox::ActionRole);
                     QPushButton* btnWork = msgBox.addButton(tr("Çalış"), QMessageBox::ActionRole);
+                    QPushButton* btnExit = msgBox.addButton(tr("Çıkış"), QMessageBox::ActionRole);
                     msgBox.exec();
                     if(msgBox.clickedButton() == btnDetail){
                         showDetail(i,j);
+                    }else if(msgBox.clickedButton() == btnWork){
+                        work(i,j);
+
+                    }else if(msgBox.clickedButton() == btnBuy){
+                        shopping(i,j);
                     }
 
                 }
@@ -464,16 +557,19 @@ for(int i=0;i<row;i++){
                         arsaList[i][j]->setIcon(ButtonMarket);
                         arsaList[i][j]->setIconSize(QSize(50,50));
                         setLandType(LandNum,"market");
+                        buildMarket(i,j);
 
                     }else if (msgBox.clickedButton() == btnMall) {
                         arsaList[i][j]->setIcon(ButtonMall);
                         arsaList[i][j]->setIconSize(QSize(50,50));
                         setLandType(LandNum,"store");
+                        buildMall(i,j);
 
                     }else if (msgBox.clickedButton() == btnProperty) {
                         arsaList[i][j]->setIcon(ButtonProperty);
                         arsaList[i][j]->setIconSize(QSize(50,50));
                         setLandType(LandNum,"landAgent");
+                        buildProperty(i,j);
 
                     }
                 }
