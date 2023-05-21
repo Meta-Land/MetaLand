@@ -819,6 +819,23 @@ void newWorker(int workerNo, QString workinglandNum, int workerFee,QString start
     setBussinessWorkerCount(workinglandNum,workerC+1);
 }
 
+void newBussines(int landNum, QString businessType, int businessLevel,
+                 int businessCapacity, int businessWorkerCount){
+    QSqlQuery query;
+    query.prepare("INSERT INTO `bussiness` VALUES (:landNum, :businessType,"
+                  ":businessLevel, :businessCapacity, :businessWorkerCount);");
+    query.bindValue(":landNum", landNum);
+    query.bindValue(":businessType", businessType);
+    query.bindValue(":businessLevel", businessLevel);
+    query.bindValue(":businessCapacity", businessCapacity);
+    query.bindValue(":businessWorkerCount", businessWorkerCount);
+    if(query.exec()){
+
+    }else{
+        qDebug()<<"new Bussines error";
+    }
+}
+
 void newMarket(QString landNum, int foodPrice,int workerFee, int numberOfWorkingDays, int workingHours){
     QSqlQuery query;
     query.prepare("INSERT INTO `markets` VALUES (:landNum, :foodPrice, :workerFee,"
