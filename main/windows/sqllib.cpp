@@ -373,6 +373,7 @@ int initManager(){
     query.bindValue(":fixedIncome", 20);
     query.bindValue(":fixedIncomeRate", 20);
     if(query.exec()){
+        genGameTable(5,5);
         return 1;
     }else{
         return 0;
@@ -401,6 +402,10 @@ int initManager(int startFood,int startMoney,int startStuff,int dailyFoodExpense
     query.bindValue(":fixedIncome", fixedIncome);
     query.bindValue(":fixedIncomeRate", fixedIncomeRate);
     if(query.exec()){
+        QString gameSize=getGameSize(1);
+        QString r=gameSize[0];
+        QString c=gameSize[2];
+        genGameTable(r.toInt(),c.toInt());
         qDebug() << "okey";
         return 1;
     }else{
