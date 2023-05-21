@@ -110,5 +110,5 @@ void newStore(QString landNum, int foodPrice,int workerFee,
 void newMarket(QString landNum, int stuffPrice,int workerFee,
                int numberOfWorkingDays, int workingHours);
 
-void newBussines(int landNum, QString businessType, int businessLevel,
+void newBussines(QString landNum, QString businessType, int businessLevel,
                  int businessCapacity, int businessWorkerCount);

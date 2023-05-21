@@ -819,7 +819,7 @@ void newWorker(int workerNo, QString workinglandNum, int workerFee,QString start
     setBussinessWorkerCount(workinglandNum,workerC+1);
 }
 
-void newBussines(int landNum, QString businessType, int businessLevel,
+void newBussines(QString landNum, QString businessType, int businessLevel,
                  int businessCapacity, int businessWorkerCount){
     QSqlQuery query;
     query.prepare("INSERT INTO `bussiness` VALUES (:landNum, :businessType,"
@@ -858,9 +858,9 @@ void newStore(QString landNum, int stuffPrice,int workerFee, int numberOfWorking
     query.bindValue(":workingHours", workingHours);
 }
 
-int getMarketWorkerFee(QString landNum){
+int getLandWorkerFee(QString landNum){
     QSqlQuery query;
-    query.prepare("SELECT workerFee FROM markets WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT workerFee FROM "+getLandType(landNum)+"s WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int workerFee = query.value(0).toInt();
@@ -868,9 +868,9 @@ int getMarketWorkerFee(QString landNum){
     return workerFee;
 }
 
-int getMarketStuffPrice(QString landNum){
+int getLandStuffPrice(QString landNum){
     QSqlQuery query;
-    query.prepare("SELECT stuffPrice FROM markets WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT stuffPrice FROM "+getLandType(landNum)+"s WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int stuffPrice = query.value(0).toInt();
@@ -878,9 +878,9 @@ int getMarketStuffPrice(QString landNum){
     return stuffPrice;
 }
 
-int getMarketNumberOfWorkingDays(QString landNum){
+int getLandNumberOfWorkingDays(QString landNum){
     QSqlQuery query;
-    query.prepare("SELECT numberOfWorkingDays FROM markets WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT numberOfWorkingDays FROM "+getLandType(landNum)+"s WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int numberOfWorkingDays = query.value(0).toInt();
@@ -888,9 +888,9 @@ int getMarketNumberOfWorkingDays(QString landNum){
     return numberOfWorkingDays;
 }
 
-int getMarketWorkingHours(QString landNum){
+int getLandWorkingHours(QString landNum){
     QSqlQuery query;
-    query.prepare("SELECT workingHours FROM markets WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT workingHours FROM "+getLandType(landNum)+"s WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int workingHours = query.value(0).toInt();
