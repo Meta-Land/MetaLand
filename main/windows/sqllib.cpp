@@ -730,7 +730,7 @@ void setBussinessWorkerCount(QString landNum, int businessWorkerCount)
 QString getBussinessType(QString landNum)
 {
     QSqlQuery query;
-    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT businessType FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     QString businessType = query.value(0).toString();
@@ -742,7 +742,7 @@ QString getBussinessType(QString landNum)
 int getBussinessLevel(QString landNum)
 {
     QSqlQuery query;
-    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT businessType FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int bussinessLevel = query.value(0).toInt();
@@ -753,7 +753,7 @@ int getBussinessLevel(QString landNum)
 int getBussinessCapacity(QString landNum)
 {
     QSqlQuery query;
-    query.prepare("SELECT businessType FROM persons WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT businessType FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int bussinessCapacity = query.value(0).toInt();
@@ -764,7 +764,7 @@ int getBussinessCapacity(QString landNum)
 int getBussinessWorkerCount(QString landNum)
 {
     QSqlQuery query;
-    query.prepare("SELECT workerCount FROM persons WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT workerCount FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int bussinessWorkerCount = query.value(0).toInt();
