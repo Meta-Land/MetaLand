@@ -148,7 +148,10 @@ void createWorkersTable(){
 void createMarketTable(){
     QSqlQuery create;
     create.prepare("CREATE TABLE IF NOT EXISTS markets (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
-                   "foodPrice INTEGER)");
+                   "foodPrice INTEGER,"
+                   "workerFee INTEGER,"
+                   "numberOfWorkingDays INTEGER,"
+                   "workingHours INTEGER)");
     if(create.exec()){
         qDebug() << "markets table created";
     }else{
@@ -159,7 +162,10 @@ void createMarketTable(){
 void createStoreTable(){
     QSqlQuery create;
     create.prepare("CREATE TABLE IF NOT EXISTS stores (landNum VARCHAR(30) UNIQUE PRIMARY KEY,"
-                   "stuffPrice INTEGER)");
+                   "stuffPrice INTEGER,"
+                   "workerFee INTEGER,"
+                   "numberOfWorkingDays INTEGER,"
+                   "workingHours INTEGER)");
     if(create.exec()){
         qDebug() << "stores table created";
     }else{
@@ -712,7 +718,7 @@ void setBussinessCapacity(QString landNum, int businessCapacity)
 void setBussinessWorkerCount(QString landNum, int businessWorkerCount)
 {
     QSqlQuery query;
-    query.prepare("UPDATE business SET businessType = '"+QString::number(businessWorkerCount)+"' WHERE landNum = '"+landNum+"'");
+    query.prepare("UPDATE business SET workerCount = '"+QString::number(businessWorkerCount)+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 
@@ -821,12 +827,53 @@ void newMarket(QString landNum, int foodPrice,int workerFee, int numberOfWorking
 
 void newStore(QString landNum, int stuffPrice,int workerFee, int numberOfWorkingDays, int workingHours){
     QSqlQuery query;
-    query.prepare("INSERT INTO `markets` VALUES (:landNum, :stuffPrice);");
+    query.prepare("INSERT INTO `stores` VALUES (:landNum, :stuffPrice, :workerFee,"
+                  " :numberOfWorkingDays, :workingHours););");
     query.bindValue(":landNum", landNum);
     query.bindValue(":stuffPrice", stuffPrice);
     query.bindValue(":workerFee", workerFee);
     query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
     query.bindValue(":workingHours", workingHours);
+}
+
+int getLandWorkerFee(QString landNum){
+    QSqlQuery query;
+    query.prepare("SELECT workerFee FROM markets WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int workerFee = query.value(0).toInt();
+    qDebug() << workerFee;
+    return workerFee;
+}
+
+int getLandStuffPrice(QString landNum){
+    QSqlQuery query;
+    query.prepare("SELECT stuffPrice FROM markets WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int stuffPrice = query.value(0).toInt();
+    qDebug() << stuffPrice;
+    return stuffPrice;
+}
+
+int getLandNumberOfWorkingDays(QString landNum){
+    QSqlQuery query;
+    query.prepare("SELECT numberOfWorkingDays FROM markets WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int numberOfWorkingDays = query.value(0).toInt();
+    qDebug() << numberOfWorkingDays;
+    return numberOfWorkingDays;
+}
+
+int getLandWorkingHours(QString landNum){
+    QSqlQuery query;
+    query.prepare("SELECT workingHours FROM markets WHERE landNum = '"+landNum+"'");
+    query.exec();
+    query.next();
+    int workingHours = query.value(0).toInt();
+    qDebug() << workingHours;
+    return workingHours;
 }
 
 void updateWorker(int workerNo, QString workinglandNum, int workerFee,QString startToWorkDate,
