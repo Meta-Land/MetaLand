@@ -76,19 +76,19 @@ void genGameTable(int, int);
 //kaç adet olduğunu geri döndürür
 int getOwnedLandNums(int, QString*);
 
-//bussines setters
-void setBussinessType(QString, QString);
-void setBussinessLevel(QString, int);
-void setBussinessCapacity(QString, int);
-void setBussinessWorkerCount(QString, int);
+//busines setters
+void setBusinessType(QString, QString);
+void setBusinessLevel(QString, int);
+void setBusinessCapacity(QString, int);
+void setBusinessWorkerCount(QString, int);
 
-//bussines getters
-QString getBussinessType(QString);
-int getBussinessLevel(QString);
-int getBussinessCapacity(QString);
-int getBussinessWorkerCount(QString);
+//busines getters
+QString getBusinessType(QString);
+int getBusinessLevel(QString);
+int getBusinessCapacity(QString);
+int getBusinessWorkerCount(QString);
 
-void bussinessLevelUp(QString);
+void businessLevelUp(QString);
 
 void newWorker(int, QString, int,QString, QString , int , int );
 void updateWorker(int, QString, int,QString, QString , int , int );
@@ -100,7 +100,7 @@ void createMarketTable();
 void createStoreTable();
 void createLandagentTable();
 
-int * getWorkersAtBussiness(QString workinglandNum);
+int * getWorkersAtBusiness(QString workinglandNum);
 bool isPersonWorking(int num);
 
 int getWorkerFee(QString landNum);
@@ -118,5 +118,5 @@ void newStore(QString landNum, int foodPrice,int workerFee,
 void newMarket(QString landNum, int stuffPrice,int workerFee,
                int numberOfWorkingDays, int workingHours);
 
-void newBussines(QString landNum, QString businessType, int businessLevel,
+void newBusines(QString landNum, QString businessType, int businessLevel,
                  int businessCapacity, int businessWorkerCount);

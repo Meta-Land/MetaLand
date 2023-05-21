@@ -699,35 +699,35 @@ void genGameTable(int x, int y){
     setLandType(QString::number(landAgentX)+"x"+QString::number(landAgentY),"landAgent");
 }
 
-void setBussinessType(QString landNum, QString businessType)
+void setBusinessType(QString landNum, QString businessType)
 {
     QSqlQuery query;
     query.prepare("UPDATE business SET businessType = '"+businessType+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 
-void setBussinessLevel(QString landNum, int businessLevel)
+void setBusinessLevel(QString landNum, int businessLevel)
 {
     QSqlQuery query;
     query.prepare("UPDATE business SET businessType = '"+QString::number(businessLevel)+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 
-void setBussinessCapacity(QString landNum, int businessCapacity)
+void setBusinessCapacity(QString landNum, int businessCapacity)
 {
     QSqlQuery query;
     query.prepare("UPDATE business SET businessType = '"+QString::number(businessCapacity)+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 
-void setBussinessWorkerCount(QString landNum, int businessWorkerCount)
+void setBusinessWorkerCount(QString landNum, int businessWorkerCount)
 {
     QSqlQuery query;
     query.prepare("UPDATE business SET workerCount = '"+QString::number(businessWorkerCount)+"' WHERE landNum = '"+landNum+"'");
     query.exec();
 }
 
-QString getBussinessType(QString landNum)
+QString getBusinessType(QString landNum)
 {
     QSqlQuery query;
     query.prepare("SELECT businessType FROM business WHERE landNum = '"+landNum+"'");
@@ -739,37 +739,37 @@ QString getBussinessType(QString landNum)
 }
 
 
-int getBussinessLevel(QString landNum)
+int getBusinessLevel(QString landNum)
 {
     QSqlQuery query;
     query.prepare("SELECT businessType FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
-    int bussinessLevel = query.value(0).toInt();
-    qDebug() << bussinessLevel;
-    return bussinessLevel;
+    int businessLevel = query.value(0).toInt();
+    qDebug() << businessLevel;
+    return businessLevel;
 }
 
-int getBussinessCapacity(QString landNum)
+int getBusinessCapacity(QString landNum)
 {
     QSqlQuery query;
     query.prepare("SELECT businessType FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
-    int bussinessCapacity = query.value(0).toInt();
-    qDebug() << bussinessCapacity;
-    return bussinessCapacity;
+    int businessCapacity = query.value(0).toInt();
+    qDebug() << businessCapacity;
+    return businessCapacity;
 }
 
-int getBussinessWorkerCount(QString landNum)
+int getBusinessWorkerCount(QString landNum)
 {
     QSqlQuery query;
     query.prepare("SELECT workerCount FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
-    int bussinessWorkerCount = query.value(0).toInt();
-    qDebug() << bussinessWorkerCount;
-    return bussinessWorkerCount;
+    int businessWorkerCount = query.value(0).toInt();
+    qDebug() << businessWorkerCount;
+    return businessWorkerCount;
 }
 
 
@@ -787,14 +787,14 @@ int getOwnedLandNums(int landOwner, QString *landNumList){
     return x;
 }
 
-void bussinessLevelUp(QString landNum){
-    int level = getBussinessLevel(landNum);
-    int capacity = getBussinessCapacity(landNum);
+void businessLevelUp(QString landNum){
+    int level = getBusinessLevel(landNum);
+    int capacity = getBusinessCapacity(landNum);
     //level 3 ten fazla ise arttırmaz
     //(1. seviye - 3 oyuncu; 2. seviye-6 oyuncu; 3. seviye 12 oyuncu)
     if(level<3){
-        setBussinessLevel(landNum,level+1);
-        setBussinessCapacity(landNum,capacity*2);
+        setBusinessLevel(landNum,level+1);
+        setBusinessCapacity(landNum,capacity*2);
     }
 }
 
@@ -815,14 +815,14 @@ void newWorker(int workerNo, QString workinglandNum, int workerFee,QString start
     }else{
         qDebug()<<"new Worker error";
     }
-    int workerC = getBussinessWorkerCount(workinglandNum);
-    setBussinessWorkerCount(workinglandNum,workerC+1);
+    int workerC = getBusinessWorkerCount(workinglandNum);
+    setBusinessWorkerCount(workinglandNum,workerC+1);
 }
 
-void newBussines(QString landNum, QString businessType, int businessLevel,
+void newBusiness(QString landNum, QString businessType, int businessLevel,
                  int businessCapacity, int businessWorkerCount){
     QSqlQuery query;
-    query.prepare("INSERT INTO `bussiness` VALUES (:landNum, :businessType,"
+    query.prepare("INSERT INTO `business` VALUES (:landNum, :businessType,"
                   ":businessLevel, :businessCapacity, :businessWorkerCount);");
     query.bindValue(":landNum", landNum);
     query.bindValue(":businessType", businessType);
@@ -832,7 +832,7 @@ void newBussines(QString landNum, QString businessType, int businessLevel,
     if(query.exec()){
 
     }else{
-        qDebug()<<"new Bussines error";
+        qDebug()<<"new Business error";
     }
 }
 
@@ -982,7 +982,7 @@ int * getWorkers(){
     return workerList;
 }
 
-int * getWorkersAtBussiness(QString workinglandNum){
+int * getWorkersAtBusiness(QString workinglandNum){
     QSqlQuery query;
     query.prepare("SELECT workerNo FROM workers WHERE workinglandNum = "+ workinglandNum +";");
     query.exec();
