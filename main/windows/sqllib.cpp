@@ -373,7 +373,7 @@ int initManager(){
     query.bindValue(":fixedIncome", 20);
     query.bindValue(":fixedIncomeRate", 20);
     if(query.exec()){
-        genGameTable(5,5);
+        genLands(5,5);
         return 1;
     }else{
         return 0;
@@ -405,7 +405,7 @@ int initManager(int startFood,int startMoney,int startStuff,int dailyFoodExpense
         QString gameSize=getGameSize(1);
         QString r=gameSize[0];
         QString c=gameSize[2];
-        genGameTable(r.toInt(),c.toInt());
+        genLands(r.toInt(),c.toInt());
         qDebug() << "okey";
         return 1;
     }else{
@@ -764,7 +764,7 @@ int getBusinessCapacity(QString landNum)
 int getBusinessWorkerCount(QString landNum)
 {
     QSqlQuery query;
-    query.prepare("SELECT workerCount FROM business WHERE landNum = '"+landNum+"'");
+    query.prepare("SELECT businessWorkerCount FROM business WHERE landNum = '"+landNum+"'");
     query.exec();
     query.next();
     int businessWorkerCount = query.value(0).toInt();
