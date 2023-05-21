@@ -36,6 +36,9 @@ QPushButton *buyLandClose;
 QPushButton *detailClose;
 int row,col;
 int num;
+QString userName;
+QString userSurname;
+QString numSt;
 
 gameScreen::gameScreen(int personNum,QMainWindow *parent)
     : QMainWindow(parent)
@@ -91,9 +94,9 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
     userBtn->setIcon(ButtonUser);
     userBtn->setIconSize(QSize(50,50));
 
-    QString userName=getPersonName(personNum1);
-    QString userSurname=getPersonSurname(personNum1);
-    QString numSt=QString::number(personNum1);
+    userName=getPersonName(personNum1);
+    userSurname=getPersonSurname(personNum1);
+    numSt=QString::number(personNum1);
 
     qDebug() <<"numara:" <<userName;
 
@@ -192,20 +195,21 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
             setLandType("0x1","store");
             setLandType("0x2","market");
 
-            newBusiness("0x0","landAgent",1,3,0);
-            newBusiness("0x1","store",1,3,0);
-            newBusiness("0x2","market",1,3,0);
-
 
             if(LandType=="store"){
                 arsaList[i][j]->setIcon(ButtonMall);
                 arsaList[i][j]->setIconSize(QSize(50,50));
+                newBusiness(LandNum,"store",1,3,0);
             }else if(LandType=="market"){
                 arsaList[i][j]->setIcon(ButtonMarket);
                 arsaList[i][j]->setIconSize(QSize(50,50));
+                newBusiness(LandNum,"market",1,3,0);
+
             }else if(LandType=="landAgent"){
                 arsaList[i][j]->setIcon(ButtonProperty);
                 arsaList[i][j]->setIconSize(QSize(50,50));
+                newBusiness(LandNum,"landAgent",1,3,0);
+
             }
             qDebug() <<LandType;
         }
@@ -406,8 +410,9 @@ void gameScreen::buildMall(int x,int y)
     newBusiness(LandNum,"store",1,3,0);
 
     arsaList[x][y]->setIcon(ButtonMall);
-    arsaList[x][y]->setIconSize(QSize(80,80));
+    arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"store");
+    update();
 }
 void gameScreen::buildProperty(int x,int y)
 {
@@ -417,10 +422,10 @@ void gameScreen::buildProperty(int x,int y)
     QPixmap pixProperty("../main/Assets/property.png");
     QIcon ButtonProperty(pixProperty);
     newBusiness(LandNum,"landAgent",1,3,0);
-
     arsaList[x][y]->setIcon(ButtonProperty);
-    arsaList[x][y]->setIconSize(QSize(80,80));
+    arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"landAgent");
+    update();
 }
 
 void gameScreen::showDetail(int i,int j)
@@ -459,11 +464,15 @@ void gameScreen::work(int i,int j)
     QString LandNum=rowNum+"x"+colNum;
     int workerNum=getBusinessWorkerCount(LandNum);
     QString workerNumSt=QString::number(workerNum);
+    QString landType=getLandType(LandNum);
     QDate Today = QDate::currentDate();
     QString startDate = Today.toString("");
     Today.addDays(3);
     QString finishDate=Today.toString("yyyy-MM-dd");
     newWorker(personNum1,LandNum,100,"1-1-1","1-1-1",3,3);
+    userLabel->setText("<big>İsim Soyisim:</big>"+userName+" "+userSurname+"<br>"
+                        "<big>Numara:</big>"+ numSt+"<br>"
+                        "<big>Çalıştığı İşletme:</big>"+landType);
 }
 
 
