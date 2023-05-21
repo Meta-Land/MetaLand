@@ -106,4 +106,4 @@ bool isPersonWorking(int num);
 int getWorkerFee(QString landNum);
 
 void newStore(QString landNum, int stuffPrice);
-void newStore(QString landNum, int foodPrice);
+void newMarket(QString landNum, int foodPrice);

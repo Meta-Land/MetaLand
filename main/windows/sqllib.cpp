@@ -804,20 +804,29 @@ void newWorker(int workerNo, QString workinglandNum, int workerFee,QString start
     }else{
         qDebug()<<"new Worker error";
     }
+    int workerC = getBussinessWorkerCount(workinglandNum);
+    setBussinessWorkerCount(workinglandNum,workerC+1);
 }
 
-void newMarket(QString landNum, int foodPrice){
+void newMarket(QString landNum, int foodPrice,int workerFee, int numberOfWorkingDays, int workingHours){
     QSqlQuery query;
-    query.prepare("INSERT INTO `markets` VALUES (landNum, :foodPrice);");
+    query.prepare("INSERT INTO `markets` VALUES (:landNum, :foodPrice, :workerFee,"
+                  " :numberOfWorkingDays, :workingHours);");
     query.bindValue(":landNum", landNum);
     query.bindValue(":foodPrice", foodPrice);
+    query.bindValue(":workerFee", workerFee);
+    query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
+    query.bindValue(":workingHours", workingHours);
 }
 
-void newStore(QString landNum, int stuffPrice){
+void newStore(QString landNum, int stuffPrice,int workerFee, int numberOfWorkingDays, int workingHours){
     QSqlQuery query;
-    query.prepare("INSERT INTO `markets` VALUES (landNum, :stuffPrice);");
+    query.prepare("INSERT INTO `markets` VALUES (:landNum, :stuffPrice);");
     query.bindValue(":landNum", landNum);
     query.bindValue(":stuffPrice", stuffPrice);
+    query.bindValue(":workerFee", workerFee);
+    query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
+    query.bindValue(":workingHours", workingHours);
 }
 
 void updateWorker(int workerNo, QString workinglandNum, int workerFee,QString startToWorkDate,
