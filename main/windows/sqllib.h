@@ -16,6 +16,10 @@ void setFood(int,int);
 void setStuff(int,int);
 void createPersonsTable();
 void delTable(QString);
+
+QString getPersonName(int num);
+
+
 //isim ve şifreyi, başlangıç değerleriyle data base a yazan fonksiyon
 int signUp(QString,QString,QString);
 void signUpRoot(QString name,QString surname,QString password);

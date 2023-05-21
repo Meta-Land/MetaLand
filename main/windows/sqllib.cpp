@@ -269,6 +269,16 @@ int getBigestNum(){
     return -1;
 }
 
+QString getPersonName(int num){
+    QSqlQuery query;
+    query.prepare("SELECT name FROM persons WHERE num = '"+QString::number(num)+"'");
+    query.exec();
+    query.next();
+    QString gMoney = query.value(0).toString();
+    qDebug() << gMoney;
+    return gMoney;
+}
+
 int getMoney(int numberOfPerson)
 {
     QSqlQuery query;
