@@ -19,12 +19,14 @@ class gameScreen:  public QMainWindow
         void buildMarket(int x,int y);
         void buildMall(int x,int y);
         void buildProperty(int x,int y);
-        void LandDetail();
+        void LandDetail(int);
         void showDetail(int, int);
         void buyGrass(int x,int y);
         void shopping(int i, int j);
         void upDate();
         void work(int i,int j);
+        void updateDate(int);
+        void updateLabels(int);
     private:
 
         QLineEdit *shopAmount;
@@ -35,15 +37,22 @@ class gameScreen:  public QMainWindow
         QLabel *detailLabel;
         QLabel *landTypeDetail;
         QLabel *landOwnerDetail;
-        QLabel *workersDetail;
+        QLabel *workersCount;
         QLabel *workerCapacityDetail;
         QLabel *shoppingLabel;
         QLabel *priceLabel;
         QLabel *Lcoin;
         QLabel *Lstuff;
         QLabel *Lfood;
+        QLabel *workDetail;
+        QLabel *workerFeeLabel;
+        QLabel *workingDaysCountL;
+        QLabel *workingHoursL;
+        QPushButton *cancelWorkDetail;
+        QPushButton *workBtn;
         QPushButton *buy;
         QPushButton *userBtn;
+        QPushButton *updateDateBtn;
         QLabel *userLabel;
 
         /*QPushButton *market;
