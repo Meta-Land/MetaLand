@@ -58,6 +58,13 @@ int initManager(int ,int ,int ,int ,int ,int ,QString ,QString ,int , int, int);
 void updateDailyExpense(int);
 //set edilmiş günlük düşüşlerin get fonksiyonları
 
+int * getWorkersAtMarket();
+int * getWorkersAtStore();
+int * getWorkersAtLandAgent();
+
+bool isWorkingAtMarket(int personNum);
+bool isWorkingAtStore(int personNum);
+bool isWorkingAtLandAgent(int personNum);
 
 void createLandTable();
 void createBusinessTable();

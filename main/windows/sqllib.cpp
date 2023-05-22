@@ -588,17 +588,54 @@ void signUpRoot(QString name,QString surname,QString password){
     }
 }
 
-void updateDailyExpense(int personNum){
-    int food = getFood(personNum);
-    int money = getMoney(personNum);
-    int stuff = getStuff(personNum);
-    food -= getDailyFoodExpense();
-    money -= getDailyMoneyExpense();
-    stuff -= getDailyStuffExpense();
-    setFood(personNum,food);
-    setMoney(personNum,money);
-    setStuff(personNum,stuff);
+
+bool isWorkingAtMarket(int personNum){
+    int* workers = getWorkersAtMarket();
+    for(int i=0;i<50;i++){
+        if(workers[i]==personNum){
+            return true;
+        }
+    }
+    return false;
 }
+
+bool isWorkingAtStore(int personNum){
+    int* workers = getWorkersAtStore();
+    for(int i=0;i<50;i++){
+        if(workers[i]==personNum){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool isWorkingAtLandAgent(int personNum){
+    int* workers = getWorkersAtLandAgent();
+    for(int i=0;i<50;i++){
+        if(workers[i]==personNum){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+void updateDailyExpense(int personNum){
+    if( ! isWorkingAtMarket(personNum)){
+        int food = getFood(personNum);
+        food -= getDailyFoodExpense();
+        setFood(personNum,food);
+    }if( ! isWorkingAtStore(personNum)){
+        int stuff = getStuff(personNum);
+        stuff -= getDailyStuffExpense();
+        setStuff(personNum,stuff);
+    }if( ! isWorkingAtLandAgent(personNum)){
+        int money = getMoney(personNum);
+        money -= getDailyMoneyExpense();
+        setMoney(personNum,money);
+    }
+}
+
 
 int getBigestLandNum(){
     QSqlQuery query;
