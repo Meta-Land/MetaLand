@@ -914,6 +914,25 @@ int getLandWorkerFee(QString landNum){
     qDebug() << workerFee;
     return workerFee;
 }
+void buyFood(int buyer, QString landNum, int buyedCount){
+    int money = getMoney(buyer);
+    int foodPrice = getLandFoodPrice(landNum);
+    int fee = buyedCount*foodPrice;
+    if(money >= fee){
+        setMoney(money-fee);
+        setFood(getFood(buyer)+buyedCount);
+    }
+}
+
+void buyStuff(int buyer, QString landNum, int buyedCount){
+    int money = getMoney(buyer);
+    int stuffPrice = getLandStuffPrice(landNum);
+    int fee = buyedCount*stuffPrice;
+    if(money >= fee){
+        setMoney(money-fee);
+        setStuff(getStuff(buyer)+buyedCount);
+    }
+}
 
 int getLandStuffPrice(QString landNum){
     QSqlQuery query;
