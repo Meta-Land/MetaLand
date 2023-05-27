@@ -919,8 +919,8 @@ void buyFood(int buyer, QString landNum, int buyedCount){
     int foodPrice = getLandFoodPrice(landNum);
     int fee = buyedCount*foodPrice;
     if(money >= fee){
-        setMoney(money-fee);
-        setFood(getFood(buyer)+buyedCount);
+        setMoney(buyer,money-fee);
+        setFood(buyer,getFood(buyer)+buyedCount);
     }
 }
 
@@ -929,8 +929,8 @@ void buyStuff(int buyer, QString landNum, int buyedCount){
     int stuffPrice = getLandStuffPrice(landNum);
     int fee = buyedCount*stuffPrice;
     if(money >= fee){
-        setMoney(money-fee);
-        setStuff(getStuff(buyer)+buyedCount);
+        setMoney(buyer,money-fee);
+        setStuff(buyer,getStuff(buyer)+buyedCount);
     }
 }
 

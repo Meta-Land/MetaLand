@@ -108,6 +108,9 @@ void createMarketTable();
 void createStoreTable();
 void createLandagentTable();
 
+void buyFood(int buyer, QString landNum, int buyedCount);
+void buyStuff(int buyer, QString landNum, int buyedCount);
+
 int * getWorkersAtBusiness(QString workinglandNum);
 bool isPersonWorking(int num);
 

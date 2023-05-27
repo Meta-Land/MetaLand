@@ -54,6 +54,8 @@ class gameScreen:  public QMainWindow
         QPushButton *userBtn;
         QPushButton *updateDateBtn;
         QLabel *userLabel;
+        QPushButton *shopClose;
+
 
         /*QPushButton *market;
         QPushButton *property;

@@ -314,6 +314,12 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
     shopAmount->setStyleSheet("background-color :rgb(255, 180, 180);" "border-radius: 5px");
     shopAmount->setPlaceholderText("Almak istediğiniz miktar");
 
+    shopClose=new QPushButton("",shoppingLabel);
+    shopClose->setGeometry(QRect(QPoint(340,10), QSize(50,50)));
+    shopClose->setStyleSheet("background-color:rgb(255, 100, 100);" "border-radius: 5px");
+    shopClose->setText("X");
+
+
 
     //buy button
     buy= new QPushButton("",shoppingLabel);
@@ -502,15 +508,36 @@ void gameScreen::shopping(int i,int j){
     QString rowNum=QString::number(i);
     QString colNum=QString::number(j);
     QString landNum=rowNum+"x"+colNum;
+    QString LandType=getLandType(landNum);
+
     shoppingLabel->setVisible(true);
     int price=getLandFoodPrice(landNum);
     QString priceSt=QString::number(price);
 
     priceLabel->setText("birim fiyat:"+priceSt);
 
+
     connect (buy, & QPushButton :: clicked, this, [=] () -> void {
+        QString amount=shopAmount->text();
+
+        QString rowNum=QString::number(i);
+        QString colNum=QString::number(j);
+        QString landNum=rowNum+"x"+colNum;
+        QString LandType=getLandType(landNum);
+        if(LandType=="market"){
+            buyFood(personNum1,landNum,amount.toInt());
+        }else if(LandType=="store"){
+            buyStuff(personNum1,landNum,amount.toInt());
+        }
+        updateLabels(personNum1);
+        qDebug() <<amount;
+    });
+
+    connect (shopClose, & QPushButton :: clicked, this, [=] () -> void {
         shoppingLabel->setVisible(false);
     });
+
+
 }
 
 void gameScreen::updateDate(int personNum){
