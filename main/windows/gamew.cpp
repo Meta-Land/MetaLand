@@ -367,6 +367,7 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
 
 void gameScreen::LandDetail(int personNum)
 {
+    upDate();
     QPixmap pixMarket("../main/Assets/market.png");
     QIcon ButtonMarket(pixMarket);
     QPixmap pixMall("../main/Assets/mall.png");
@@ -407,7 +408,7 @@ void gameScreen::LandDetail(int personNum)
                     buyGrass(i,j);
                 });
             }
-            //arsa kişiye ait ise ise
+            //arsa kişiye ait ve boş ise
             if(landOwner==personNum && LandType=="empty"){
                 arsaListDetail[i][j]->setStyleSheet("background-color:rgb(255, 171, 118)");
                 connect (arsaListDetail[i][j], & QPushButton :: clicked, this, [=] () -> void {
@@ -424,20 +425,19 @@ void gameScreen::LandDetail(int personNum)
                             arsaList[i][j]->setIconSize(QSize(50,50));
                             //setLandType(LandNum,"market");
                             buildMarket(i,j);
-                            update();
+                            //update();
                         }else if (msgBox.clickedButton() == btnMall) {
                             arsaList[i][j]->setIcon(ButtonMall);
                             arsaList[i][j]->setIconSize(QSize(50,50));
                             //setLandType(LandNum,"store");
                             buildMall(i,j);
-                            update();
+                            //update();
 
                         }else if (msgBox.clickedButton() == btnProperty) {
                             arsaList[i][j]->setIcon(ButtonProperty);
                             arsaList[i][j]->setIconSize(QSize(50,50));
                             //setLandType(LandNum,"landAgent");
                             buildProperty(i,j);
-                            update();
 
                         }
                 });
@@ -456,12 +456,14 @@ void gameScreen::LandDetail(int personNum)
                     }
                 });
             }
-            update();
         }
     }
+
+
     connect (buyLandClose, & QPushButton :: clicked, this, [=] () -> void {
         buyGrassLabel->setVisible(false);
     });
+    update();
 }
 
 void gameScreen::buyGrass(int i,int j){
@@ -485,7 +487,6 @@ void gameScreen::buyGrass(int i,int j){
         arsaList[i][j]->setIconSize(QSize(100,100));
         setLandType(LandNum,"empty");
         setLandOwner(LandNum, personNum1);
-        upDate();
     }//satın almayı iptal et
     else if(msgBox.clickedButton() == btn2) {
 
@@ -530,7 +531,6 @@ void gameScreen::buildMarket(int x,int y)
     arsaList[x][y]->setIcon(ButtonMarket);
     arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"market");
-    update();
 }
 void gameScreen::buildMall(int x,int y)
 {
@@ -544,7 +544,6 @@ void gameScreen::buildMall(int x,int y)
     arsaList[x][y]->setIcon(ButtonMall);
     arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"store");
-    update();
 }
 void gameScreen::buildProperty(int x,int y)
 {
@@ -557,7 +556,6 @@ void gameScreen::buildProperty(int x,int y)
     arsaList[x][y]->setIcon(ButtonProperty);
     arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"landAgent");
-    update();
 }
 
 void gameScreen::showDetail(int i,int j)
@@ -631,16 +629,17 @@ void gameScreen::work(int i,int j)
 
 void gameScreen::upDate()
 {
-for(int i=0;i<row;i++){
+    for(int i=0;i<row;i++){
         for(int j=0;j<col;j++){
 
             /////////////////////////////////////
-            QString rowNum=QString::number(i);
-            QString colNum=QString::number(j);
-            QString LandNum=rowNum+"x"+colNum;
-            QString LandType=getLandType(LandNum);
+
             //arsaya tıklandığında çalışacak fonksiyonun çağırılması
             connect (arsaList[i][j], & QPushButton :: clicked, this, [=] () -> void {
+                QString rowNum=QString::number(i);
+                QString colNum=QString::number(j);
+                QString LandNum=rowNum+"x"+colNum;
+                QString LandType=getLandType(LandNum);
                 //tıklanılan arsa emlak ise
                 if(LandType=="landAgent"){
                     QMessageBox msgBox;
@@ -677,7 +676,6 @@ for(int i=0;i<row;i++){
                     }else if(msgBox.clickedButton() == btnBuy){
                         shopping(i,j);
                     }
-
                 }
                 //tıklanılan arsa mağaza ise
                 if(LandType=="store"){
@@ -703,9 +701,12 @@ for(int i=0;i<row;i++){
                     msgBox.setText("hangi işlemi yapmak istersin?");
                     QPushButton* btnDetail = msgBox.addButton(tr("detay"), QMessageBox::ActionRole);
                     QPushButton* btnCancel = msgBox.addButton(tr("çıkış"), QMessageBox::ActionRole);
+                    QPushButton* btnMarket = msgBox.addButton(tr("market kur"), QMessageBox::ActionRole);
                     msgBox.exec();
                     if(msgBox.clickedButton() == btnDetail){
                         showDetail(i,j);
+                    }else if(msgBox.clickedButton() == btnMarket){
+                        buildMarket(i,j);
                     }
                 }
 
