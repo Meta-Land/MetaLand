@@ -882,6 +882,11 @@ void newMarket(QString landNum, int foodPrice,int workerFee, int numberOfWorking
     query.bindValue(":workerFee", workerFee);
     query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
     query.bindValue(":workingHours", workingHours);
+    if(query.exec()){
+
+    }else{
+        qDebug()<<"new Market error";
+    }
 }
 
 void newStore(QString landNum, int stuffPrice,int workerFee, int numberOfWorkingDays, int workingHours){
@@ -893,6 +898,11 @@ void newStore(QString landNum, int stuffPrice,int workerFee, int numberOfWorking
     query.bindValue(":workerFee", workerFee);
     query.bindValue(":numberOfWorkingDays", numberOfWorkingDays);
     query.bindValue(":workingHours", workingHours);
+    if(query.exec()){
+
+    }else{
+        qDebug()<<"new Store error";
+    }
 }
 
 int getLandWorkerFee(QString landNum){
