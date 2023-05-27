@@ -19,6 +19,7 @@ void delTable(QString);
 
 QString getPersonName(int num);
 QString getPersonSurname(int num);
+QString getWorkingLand(int);
 
 //isim ve şifreyi, başlangıç değerleriyle data base a yazan fonksiyon
 int signUp(QString,QString,QString);

@@ -116,6 +116,9 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
 
     qDebug() <<"numara:" <<userName;
 
+    QString workingLandNum=getWorkingLand(personNum1);
+    QString workingLandType=getLandType(workingLandNum);
+
 
 
     userLabel= new QLabel("",this);
@@ -123,7 +126,7 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
     userLabel->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 15px");
     userLabel->setText("<big>İsim Soyisim:</big>"+userName+" "+userSurname+"<br>"
                         "<big>Numara:</big>"+ numSt+"<br>"
-                       "<big>Çalıştığı İşletme:</big>");
+                       "<big>Çalıştığı İşletme:</big>"+workingLandType);
 
 
     //database'den para miktarını çeker
@@ -344,10 +347,10 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
     int p=10;
 
 
-    for(int i=0;i<5;i++){
+    for(int i=0;i<row;i++){
         QVector<QPushButton*> arsaDetail2;
         QPushButton *a2;
-        for(int j=0;j<5;j++){
+        for(int j=0;j<col;j++){
             //arsaListDetail[i][j] = new QPushButton(detailBox);
             a2 = new QPushButton(buyGrassLabel);
             a2->setGeometry(QRect(QPoint(m,p), QSize(50,50)));
@@ -360,14 +363,12 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
         m=10;
     }
 
-
     //tıklama işlemlerinin gerçekleştirilmesi
     upDate();
 }
 
 void gameScreen::LandDetail(int personNum)
 {
-    upDate();
     QPixmap pixMarket("../main/Assets/market.png");
     QIcon ButtonMarket(pixMarket);
     QPixmap pixMall("../main/Assets/mall.png");
@@ -375,8 +376,10 @@ void gameScreen::LandDetail(int personNum)
     QPixmap pixProperty("../main/Assets/property.png");
     QIcon ButtonProperty(pixProperty);
     buyGrassLabel->setVisible(true);
-    for(int i=0;i<5;i++){
-        for(int j=0;j<5;j++){
+
+
+    for(int i=0;i<row;i++){
+        for(int j=0;j<col;j++){
             QString rowNum=QString::number(i);
             QString colNum=QString::number(j);
             QString LandNum=rowNum+"x"+colNum;
@@ -384,7 +387,6 @@ void gameScreen::LandDetail(int personNum)
             QString LandOwnerNum =getLandOwnerNum(LandNum);
 
             int landOwner=LandOwnerNum.toInt();
-
 
             //arsa emlak ise
             if(LandType=="landAgent"){
@@ -440,6 +442,7 @@ void gameScreen::LandDetail(int personNum)
                             buildProperty(i,j);
 
                         }
+                        //msgBox-
                 });
             }
             if(landOwner==personNum && LandType!="empty"){
@@ -463,6 +466,7 @@ void gameScreen::LandDetail(int personNum)
     connect (buyLandClose, & QPushButton :: clicked, this, [=] () -> void {
         buyGrassLabel->setVisible(false);
     });
+
     update();
 }
 
@@ -491,9 +495,18 @@ void gameScreen::buyGrass(int i,int j){
     else if(msgBox.clickedButton() == btn2) {
 
     }
+    msgBox.close();
+   // upDate();
 }
 void gameScreen::shopping(int i,int j){
+    QString rowNum=QString::number(i);
+    QString colNum=QString::number(j);
+    QString landNum=rowNum+"x"+colNum;
     shoppingLabel->setVisible(true);
+    int price=getLandFoodPrice(landNum);
+    QString priceSt=QString::number(price);
+
+    priceLabel->setText("birim fiyat:"+priceSt);
 
     connect (buy, & QPushButton :: clicked, this, [=] () -> void {
         shoppingLabel->setVisible(false);
@@ -527,10 +540,11 @@ void gameScreen::buildMarket(int x,int y)
     QPixmap pixMarket("../main/Assets/market.png");
     QIcon ButtonMarket(pixMarket);
     newBusiness(LandNum,"market",1,3,0);
-    //newMarket(LandNum,2,100,5,2);
+    newMarket(LandNum,2,100,5,2);
     arsaList[x][y]->setIcon(ButtonMarket);
     arsaList[x][y]->setIconSize(QSize(50,50));
     setLandType(LandNum,"market");
+    update();
 }
 void gameScreen::buildMall(int x,int y)
 {
@@ -599,10 +613,7 @@ void gameScreen::work(int i,int j)
     QString startDate = Today.toString("");
     Today.addDays(3);
     QString finishDate=Today.toString("yyyy-MM-dd");
-    newWorker(personNum1,LandNum,100,"1-1-1","1-1-1",3,3);
-    userLabel->setText("<big>İsim Soyisim:</big>"+userName+" "+userSurname+"<br>"
-                        "<big>Numara:</big>"+ numSt+"<br>"
-                        "<big>Çalıştığı İşletme:</big>"+landType);
+
     /*
     QLabel *workerFeeLabel;
     QLabel *workingDaysCountL;
@@ -623,6 +634,14 @@ void gameScreen::work(int i,int j)
     connect (cancelWorkDetail, & QPushButton :: clicked, this, [=] () -> void {
       workDetail->setVisible(false);
     });
+    connect (workBtn, & QPushButton :: clicked, this, [=] () -> void {
+        if(!isPersonWorking(personNum1)){
+            newWorker(personNum1,LandNum,100,"1-1-1","1-1-1",3,3);
+            userLabel->setText("<big>İsim Soyisim:</big>"+userName+" "+userSurname+"<br>"
+                                "<big>Numara:</big>"+ numSt+"<br>"
+                                "<big>Çalıştığı İşletme:</big>"+landType);
+        }
+    });
 }
 
 
@@ -631,8 +650,6 @@ void gameScreen::upDate()
 {
     for(int i=0;i<row;i++){
         for(int j=0;j<col;j++){
-
-            /////////////////////////////////////
 
             //arsaya tıklandığında çalışacak fonksiyonun çağırılması
             connect (arsaList[i][j], & QPushButton :: clicked, this, [=] () -> void {
@@ -652,6 +669,7 @@ void gameScreen::upDate()
                     msgBox.exec();
                     if(msgBox.clickedButton() == btnBuyGrass){
                         LandDetail(personNum1);
+                        msgBox.close();
                     }else if(msgBox.clickedButton() == btnDetail){
                         showDetail(i,j);
                     }else if(msgBox.clickedButton() == btnWork){
@@ -690,7 +708,6 @@ void gameScreen::upDate()
                         showDetail(i,j);
                     }else if(msgBox.clickedButton() == btnWork){
                         work(i,j);
-
                     }else if(msgBox.clickedButton() == btnBuy){
                         shopping(i,j);
                     }
@@ -701,12 +718,9 @@ void gameScreen::upDate()
                     msgBox.setText("hangi işlemi yapmak istersin?");
                     QPushButton* btnDetail = msgBox.addButton(tr("detay"), QMessageBox::ActionRole);
                     QPushButton* btnCancel = msgBox.addButton(tr("çıkış"), QMessageBox::ActionRole);
-                    QPushButton* btnMarket = msgBox.addButton(tr("market kur"), QMessageBox::ActionRole);
                     msgBox.exec();
                     if(msgBox.clickedButton() == btnDetail){
                         showDetail(i,j);
-                    }else if(msgBox.clickedButton() == btnMarket){
-                        buildMarket(i,j);
                     }
                 }
 
