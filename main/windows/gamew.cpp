@@ -547,6 +547,17 @@ void gameScreen::shopping(int i,int j){
 }
 
 void gameScreen::updateDate(int personNum){
+    int * list = getEliminated();
+    delEliminated();
+    for(int i = 0;i<10;i++){
+        if(list[i] != 0){
+            if(list[i]==personNum1){
+                this->close();
+            }
+        }
+    }
+
+
     updateDailyExpense(personNum,&day);
     updateLabels(personNum);
     day++;
