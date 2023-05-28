@@ -30,10 +30,6 @@ int main(int argc, char *argv[])
     updateWorker(activeNum,"4x4",100,"1-1-1","3-3-3",5,5);
     qDebug() << isPersonWorking(activeNum);
 
-    getStartFood(1);
-    getFood(1);
-    updateDailyExpense(1);
-    getFood(1);
     QString list[400];
     getOwnedLandNums(-1,list);
 

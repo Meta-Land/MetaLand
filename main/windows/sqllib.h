@@ -56,7 +56,7 @@ int getfixedIncomeRate(int);
 int initManager();
 int initManager(int ,int ,int ,int ,int ,int ,QString ,QString ,int , int, int);
 // gün bitimi yemek eşya ve paranın data baste bulunan değere göre güncellenmesi
-void updateDailyExpense(int);
+void updateDailyExpense(int,int*);
 //set edilmiş günlük düşüşlerin get fonksiyonları
 
 int * getWorkersAtMarket();

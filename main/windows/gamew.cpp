@@ -39,7 +39,7 @@ int num;
 QString userName;
 QString userSurname;
 QString numSt;
-
+int day=0;
 
 gameScreen::gameScreen(int personNum,QMainWindow *parent)
     : QMainWindow(parent)
@@ -94,8 +94,9 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
 
     //date button
     updateDateBtn= new QPushButton("",this);
-    updateDateBtn->setGeometry(QRect(QPoint(widthS-150,heightS-100), QSize(100,50)));
+    updateDateBtn->setGeometry(QRect(QPoint(widthS-150,heightS-200), QSize(100,50)));
     updateDateBtn->setText("gün artır");
+    updateDateBtn->setStyleSheet("background-color:rgb(255, 171, 118);" "border-radius: 15px;");
     connect (updateDateBtn, & QPushButton :: clicked, this, [=] () -> void {
         updateDate(personNum1);
     });
@@ -114,12 +115,13 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
     userSurname=getPersonSurname(personNum1);
     numSt=QString::number(personNum1);
 
+    QString workingLandType="";
     qDebug() <<"numara:" <<userName;
 
-    QString workingLandNum=getWorkingLand(personNum1);
-    QString workingLandType=getLandType(workingLandNum);
-
-
+    if(isPersonWorking(personNum1)){
+        QString workingLandNum=getWorkingLand(personNum1);
+        workingLandType=getLandType(workingLandNum);
+    }
 
     userLabel= new QLabel("",this);
     userLabel->setGeometry(QRect(QPoint(widthS-260,45), QSize(150,100)));
@@ -139,7 +141,7 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
     int foodS=getFood(personNum1);
     QString stFood=QString::number(foodS);
     Lfood= new QLabel(stFood,this);
-    Lfood->setGeometry(QRect(QPoint(widthS-210,205), QSize(100,35)));
+    Lfood->setGeometry(QRect(QPoint(widthS-210,215), QSize(100,35)));
     Lfood->setStyleSheet("background-color: rgb(247, 219, 106);" "border-radius: 15px");
 
     //database'den eşya miktarını çeker
@@ -151,15 +153,15 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
 
     //coin label
     coin= new QLabel("",this);
-    coin->setGeometry(QRect(QPoint(widthS-100,100), QSize(55,55)));
+    coin->setGeometry(QRect(QPoint(widthS-100,140), QSize(55,55)));
     coin->setPixmap(pixCoin.scaled(55,55));
     //yemek label
     food= new QLabel("",this);
-    food->setGeometry(QRect(QPoint(widthS-100,165), QSize(55,55)));
+    food->setGeometry(QRect(QPoint(widthS-100,205), QSize(55,55)));
     food->setPixmap(pixFood.scaled(55,55));
     //stuff label
     stuff= new QLabel("",this);
-    stuff->setGeometry(QRect(QPoint(widthS-100,230), QSize(55,55)));
+    stuff->setGeometry(QRect(QPoint(widthS-100,270), QSize(55,55)));
     stuff->setPixmap(pixStuff.scaled(55,55));
 
 
@@ -213,7 +215,11 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
             setLandType("0x0","landAgent");
             setLandType("0x1","store");
             setLandType("0x2","market");
-
+            newMarket("0x2",2,50,5,6);
+            newStore("0x1",2,50,5,6);
+            newBusiness("0x0","landAgent",1,-1,0);
+            newBusiness("0x1","store",1,-1,0);
+            newBusiness("0x2","market",1,-1,0);
 
             if(LandType=="store"){
                 arsaList[i][j]->setIcon(ButtonMall);
@@ -238,12 +244,12 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
 
     //emlak için label oluşturulması
     buyGrassLabel= new QLabel("",this);
-    buyGrassLabel->setGeometry(QRect(QPoint(widthS/2-200,heightS/2-200), QSize(400,400)));
+    buyGrassLabel->setGeometry(QRect(QPoint(widthS/2-350,heightS/2-350), QSize(700,700)));
     buyGrassLabel->setStyleSheet("background-color :rgb(248, 255, 219);" "border-radius: 5px");
 
     //arsa alma sekmesini kapatan buton
     buyLandClose =new QPushButton("",buyGrassLabel);
-    buyLandClose->setGeometry(QRect(QPoint(340,10), QSize(50,50)));
+    buyLandClose->setGeometry(QRect(QPoint(640,10), QSize(50,50)));
     buyLandClose->setStyleSheet("background-color:rgb(255, 100, 100);" "border-radius: 5px");
     buyLandClose->setText("X");
     buyGrassLabel->setVisible(false);
@@ -541,8 +547,9 @@ void gameScreen::shopping(int i,int j){
 }
 
 void gameScreen::updateDate(int personNum){
-    updateDailyExpense(personNum);
+    updateDailyExpense(personNum,&day);
     updateLabels(personNum);
+    day++;
 }
 void gameScreen::updateLabels(int personNum){
     int coinS=getMoney(personNum);
