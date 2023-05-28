@@ -182,15 +182,11 @@ gameScreen::gameScreen(int personNum,QMainWindow *parent)
 
         for(auto j=0;j<col;j++)
         {
-            QString stI=QString::number(i);
-            QString stJ=QString::number(j);
-            QString text=stI+stJ;
             a = new QPushButton(this);
             a->setGeometry(QRect(QPoint(x,y), QSize(100,100)));
             //butona resim eklenmesi
             a->setIcon(ButtonIcon);
             a->setIconSize(QSize(100,100));
-            a->setText(text);
             //buton arka planını saydamlaştırma
             a->setStyleSheet("background-color: rgba(255, 255, 255, 0)");
             list2.push_back(a);
@@ -421,6 +417,8 @@ void gameScreen::LandDetail(int personNum)
                 connect (arsaListDetail[i][j], & QPushButton :: clicked, this, [=] () -> void {
                     buyGrass(i,j);
                 });
+            }else if(LandType=="empty" && landOwner!=personNum){
+                arsaListDetail[i][j]->setStyleSheet("background-color:rgb(255, 125, 125)");
             }
             //arsa kişiye ait ve boş ise
             if(landOwner==personNum && LandType=="empty"){
@@ -471,6 +469,7 @@ void gameScreen::LandDetail(int personNum)
                     }
                 });
             }
+
         }
     }
 
