@@ -115,7 +115,7 @@ int * getWorkersAtBusiness(QString workinglandNum);
 bool isPersonWorking(int num);
 
 int getWorkerFee(QString landNum);
-
+int getWorkerFee(int workernum);
 
 int getLandFoodPrice(QString landNum);
 int getLandStuffPrice(QString landNum);

@@ -620,7 +620,7 @@ bool isWorkingAtLandAgent(int personNum){
 }
 
 
-void updateDailyExpense(int personNum){
+void updateDailyExpense(int personNum,int *day){
     if( ! isWorkingAtMarket(personNum)){
         int food = getFood(personNum);
         food -= getDailyFoodExpense();
@@ -633,6 +633,13 @@ void updateDailyExpense(int personNum){
         int money = getMoney(personNum);
         money -= getDailyMoneyExpense();
         setMoney(personNum,money);
+    }
+    if(isPersonWorking(personNum)){
+        if(*day%7==0){
+            int money = getMoney(personNum);
+            money += getWorkerFee(personNum);
+            setMoney(personNum,money);
+        }
     }
 }
 
